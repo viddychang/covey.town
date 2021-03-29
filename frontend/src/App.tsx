@@ -4,9 +4,12 @@ import React, {
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Button } from '@chakra-ui/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import assert from 'assert';
+import { Widget } from 'react-chat-widget';
+
+import 'react-chat-widget/lib/styles.css';
 import WorldMap from './components/world/WorldMap';
 import VideoOverlay from './components/VideoCall/VideoOverlay/VideoOverlay';
 import { CoveyAppState, NearbyPlayers } from './CoveyTypes';
@@ -216,15 +219,30 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
     });
   }, [dispatchAppUpdate, setOnDisconnect]);
 
+  const handleNewUserMessage = (newMessage: string) => {
+    console.log(`New message incoming! ${newMessage}`);
+  };
+
+  const getCustomLauncher = (handleToggle: any) =>
+    <Button onClick={handleToggle}>Chat</Button>
+
   const page = useMemo(() => {
     if (!appState.sessionToken) {
       return <Login doLogin={setupGameController} />;
     } if (!videoInstance) {
       return <div>Loading...</div>;
     }
+
     return (
       <div>
         <WorldMap />
+        <Widget
+          title={`Covey Town Name: `}
+          subtitle="Welcome to this town. Lets start chatting!"
+          fullScreenMode={false}
+          handleNewUserMessage={handleNewUserMessage}
+          launcher={(handleToggle: any) => getCustomLauncher(handleToggle)}
+        />
         <VideoOverlay preferredMode="fullwidth" />
       </div>
     );
