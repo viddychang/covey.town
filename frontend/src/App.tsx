@@ -28,6 +28,7 @@ import { Callback } from './components/VideoCall/VideoFrontend/types';
 import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
+import TownChat from "./components/Chat/TownChat";
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -219,13 +220,6 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
     });
   }, [dispatchAppUpdate, setOnDisconnect]);
 
-  const handleNewUserMessage = (newMessage: string) => {
-    console.log(`New message incoming! ${newMessage}`);
-  };
-
-  const getCustomLauncher = (handleToggle: any) =>
-    <Button onClick={handleToggle}>Chat</Button>
-
   const page = useMemo(() => {
     if (!appState.sessionToken) {
       return <Login doLogin={setupGameController} />;
@@ -236,13 +230,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
     return (
       <div>
         <WorldMap />
-        <Widget
-          title={`Covey Town Name: `}
-          subtitle="Welcome to this town. Lets start chatting!"
-          fullScreenMode={false}
-          handleNewUserMessage={handleNewUserMessage}
-          launcher={(handleToggle: any) => getCustomLauncher(handleToggle)}
-        />
+        <TownChat />
         <VideoOverlay preferredMode="fullwidth" />
       </div>
     );

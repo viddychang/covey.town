@@ -1,6 +1,6 @@
 /**
  * Hint: You probably shouldn't be using this directly. Check to see if you
- * should be using the Chat API.
+ * should be using the TownChat API.
  */
 export default class LocalStorage {
   private static readonly twilioChatTokenKey = 'twilioChatToken';
