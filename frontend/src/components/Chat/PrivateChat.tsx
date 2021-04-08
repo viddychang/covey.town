@@ -3,21 +3,21 @@ import React from "react";
 import {Button} from "@chakra-ui/react";
 
 
-const TownChat = () => {
+const PrivateChat = () => {
   const handleNewUserMessage = (newMessage: string) => {
     console.log(`New message incoming! ${newMessage}`);
   };
 
   const getCustomLauncher = (handleToggle: any) =>
-    <Button onClick={handleToggle}>Chat</Button>
+    <Button onClick={handleToggle}>Private Chat</Button>
 
   return(<Widget
-    title={`Covey Town Name: `}
-    subtitle="Welcome to this town. Lets start chatting!"
+    title="Private Chat"
+    subtitle="Private chat with: "
     fullScreenMode={false}
     handleNewUserMessage={handleNewUserMessage}
     launcher={(handleToggle: any) => getCustomLauncher(handleToggle)}
   />)
 }
 
-export default TownChat;
+export default PrivateChat;
