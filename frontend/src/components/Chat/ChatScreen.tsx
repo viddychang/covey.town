@@ -15,7 +15,7 @@ export type ChatMessage = {
   time: string
 }
 
-const TownChat = ({messages, closeChat, handleMessage} : TownChatProps) => {
+const ChatScreen = ({messages, closeChat, handleMessage} : TownChatProps) => {
 
   const [inputMessage , setInputMessage] = useState("");
   let msgIndex = 0;
@@ -89,4 +89,4 @@ const TownChat = ({messages, closeChat, handleMessage} : TownChatProps) => {
     </div>)
 }
 
-export default TownChat;
+export default ChatScreen;

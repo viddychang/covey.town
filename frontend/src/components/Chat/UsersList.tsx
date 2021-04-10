@@ -47,7 +47,7 @@ const UsersList = () => {
                   {players.map(player => (
                     <Tr key={player.id}>
                       <Td>{player.userName}</Td>
-                      <Td><PrivateChat/></Td>
+                      <Td><Button>Chat</Button></Td>
                     </Tr>))}
                 </Tbody>
               </Table>
