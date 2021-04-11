@@ -1,98 +1,131 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, Input, IconButton, InputGroup, InputLeftElement , InputRightElement } from "@chakra-ui/react";
 import logo from '../../logo.svg';
 import './TownChat.css';
-import { ChatMessage, ChatState } from './types';
 import { ChatContext } from './ChatContext';
+import ChatScreen, {ChatMessageProps} from "./ChatScreen";
+import useCoveyAppState from "../../hooks/useCoveyAppState";
 
 
-class Chat extends React.Component <any, any> {
+
+const Chat = () =>  {
  // static contextType = ChatContext;
- constructor(props: any) {
-  super(props);
-    this. state = {
-      messages: [
-        {
-          message: 'Welcome! Type a message and press Send Message to continue the chat.',
-          author: 'Bot'
-        }
-      ],
-      input: ''
-    }
-  }
-  
-  componentDidMount () {
-  
-    const myContext = this.context;
+
+  const [openChat, setOpenChat] = useState(false);
+  const [inputMessage , setInputMessage] = useState("");
+  let msgIndex = 0;
+  const {
+    userName
+  } = useCoveyAppState();
+  const today = new Date();
+  const time = `${today.getHours()  }:${  today.getMinutes()}`;
+
+
+
+  const [messages, setMessages] = useState([{
+    message: 'Welcome! Type a message and press Send Message to continue the chat.',
+    author: 'Bot',
+    time: '22:00'
+  }]);
+
+  const myContext = useContext(ChatContext);
+
+  useEffect(() => {
+    // this.context;
     // initiate socket connection
     myContext.init();
 
     const observable = myContext.onMessage();
 
-    observable.subscribe((m: ChatMessage) => {
-      const {messages} = this.state;
+    observable.subscribe((m: ChatMessageProps) => {
       messages.push(m);
-      this.setState({ messages });
+      setMessages( messages );
     });
-  }
+  },[inputMessage])
 
-  componentWillUnmount () {
-    const myContext = this.context;
-    myContext.disconnect();
-  }
 
-  render () {
-
-    const updateInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      this.setState({ input: e.target.value });
+  const handleMessage = (messageObj: ChatMessageProps): void => {
+    const author = 'Ross';
+    if (inputMessage !== '') {
+      myContext.send(messageObj);
+      setInputMessage('' );
     }
+  };
 
-    const handleMessage = (): void => {
-      const myContext = this.context;
-      const author = 'Ross';
-      const {inp} = this.state;
-      if (inp !== '') {
-        myContext.send({
-          message: inp,
-          author
-        });
-        this.setState({ input: '' });
-      }
-    };
-
-    let msgIndex = 0;
-    const {messages,input} = this.state
     return (
-      <div className="App">
-        <img src={logo} className="App-logo" alt="logo" />
+      <div>
+        Hello
+        <Button onClick={() => setOpenChat(true)}>Public Chat</Button>
+        {openChat &&
+        <div className='Public-chat'>
+          <div className="rcw-header">
+            <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+              Close
+            </Button>
+            <h4 className="rcw-title">
+              <img src="https://img.icons8.com/clouds/2x/real-estate.png" className="avatar" alt="profile" />
+              Covey Town Title
+            </h4>
+            <span>Covey town chat subtitle</span>
+          </div>
+          <div className="App-chatbox">
+            {messages.map((msg: ChatMessageProps) => {
+              msgIndex += 1;
+              return (
+                <div key={msgIndex}>
+                  <p style={{float: "right"}}>
+                    {msg.time}
+                  </p>
+                  <p>{msg.author}:</p>
+                  <p>
+                    {msg.message}
+                  </p>
 
-        <div className="App-chatbox">
-          {messages.map((msg: ChatMessage) => {
-            msgIndex += 1;
-            return (
-              <div key={msgIndex}>
-                <p>{msg.author}</p>
-                <p>
-                  {msg.message}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-        <input
-          className="App-Textarea"
-          placeholder="Type your messsage here..."
-          onChange={updateInput}
-          value={input}
-        />
-        <p>
-          <button type='button' onClick={() => { handleMessage() }}>
-            Send Message
-          </button>
-        </p>
+                </div>
+              );
+            })}
+          </div>
+
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              color="gray.300"
+              fontSize="1.2em"
+            >
+              $
+            </InputLeftElement>
+            <Input
+              className="App-Textarea"
+              placeholder="Type your messsage here..."
+              onChange={event => setInputMessage(event.target.value)}
+            />
+            <InputRightElement>
+              <IconButton
+                colorScheme="blue"
+                aria-label="Search database"
+                onClick={() => handleMessage({
+                  message: inputMessage,
+                  author: userName,
+                  time
+                })}
+              >Chat</IconButton>
+            </InputRightElement>
+          </InputGroup>
+          <p>
+            <button type="submit" onClick={() => {
+              handleMessage({
+                message: inputMessage,
+                author: userName,
+                time
+              })
+            }}>
+              Send Message
+            </button>
+          </p>
+        </div>}
       </div>
     );
-  }
+
 }
 
 export default Chat;
-Chat.contextType = ChatContext

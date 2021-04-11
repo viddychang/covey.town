@@ -5,12 +5,12 @@ import "./TownChat.css";
 
 
 type TownChatProps = {
-  messages: ChatMessage[],
+  messages: ChatMessageProps[],
   closeChat: () => void,
   handleMessage : (input: { author: string; time: string; message: string }) => void
 }
 
-export type ChatMessage = {
+export type ChatMessageProps = {
   message: string,
   author: string,
   time: string
@@ -53,7 +53,7 @@ const ChatScreen = ({messages, closeChat, handleMessage} : TownChatProps) => {
         <span>Covey town chat subtitle</span>
       </div>
       <div className="App-chatbox">
-        {messages.map((msg: ChatMessage) => {
+        {messages.map((msg: ChatMessageProps) => {
           msgIndex += 1;
           return (
             <div key={msgIndex}>

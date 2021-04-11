@@ -1,6 +1,7 @@
 import { fromEvent, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
 import { ChatMessage } from './types';
+import {ChatMessageProps} from "./ChatScreen";
 
 class SocketService {
   socket = io('localhost:8080', { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -12,13 +13,13 @@ class SocketService {
   }
 
   // send a message for the server to broadcast
-  public send(message: ChatMessage): void {
+  public send(message: ChatMessageProps): void {
     console.log(`emitting message: ${message}`);
     this.socket.emit('message', message);
   }
 
   // link message event to rxjs data source
-  public onMessage(): Observable<ChatMessage> {
+  public onMessage(): Observable<ChatMessageProps> {
     return fromEvent(this.socket, 'message');
   }
 
