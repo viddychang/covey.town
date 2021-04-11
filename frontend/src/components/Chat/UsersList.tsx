@@ -12,10 +12,10 @@ import {
   Tbody,
   Td,
   Tr,
-
   useDisclosure,
 } from '@chakra-ui/react';
 import useCoveyAppState from "../../hooks/useCoveyAppState";
+
 
 const UsersList = () => {
   const {

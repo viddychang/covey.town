@@ -4,11 +4,9 @@ import React, {
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import { ChakraProvider, Button } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import assert from 'assert';
-import { Widget } from 'react-chat-widget';
-
 import 'react-chat-widget/lib/styles.css';
 import WorldMap from './components/world/WorldMap';
 import VideoOverlay from './components/VideoCall/VideoOverlay/VideoOverlay';
@@ -28,9 +26,10 @@ import { Callback } from './components/VideoCall/VideoFrontend/types';
 import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
-import ChatScreen from "./components/Chat/ChatScreen";
 import UsersList from "./components/Chat/UsersList";
 import Chat from "./components/Chat/Chat";
+import  SocketService  from './components/Chat/SocketService';
+import { ChatContext } from './components/Chat/ChatContext';
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -223,6 +222,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const page = useMemo(() => {
+    const chat = new SocketService();
     if (!appState.sessionToken) {
       return <Login doLogin={setupGameController} />;
     } if (!videoInstance) {
@@ -232,7 +232,9 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
        return (
       <div>
         <WorldMap />
-        <Chat />
+        <ChatContext.Provider value={chat}>
+          <Chat />
+         </ChatContext.Provider>
         <UsersList />
         <VideoOverlay preferredMode="fullwidth" />
       </div>
