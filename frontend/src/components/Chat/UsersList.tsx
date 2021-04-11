@@ -16,14 +16,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import useCoveyAppState from "../../hooks/useCoveyAppState";
-import PrivateChat from "./PrivateChat";
-
 
 const UsersList = () => {
   const {
     emitMovement, players,
   } = useCoveyAppState();
-  console.log({players});
   const {isOpen, onOpen, onClose} = useDisclosure()
   const btnRef = React.useRef()
   return (

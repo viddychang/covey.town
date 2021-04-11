@@ -1,7 +1,8 @@
 import React, {useState} from "react";
-import {Button} from "@chakra-ui/react";
+import {Button, Input, IconButton, InputGroup, InputLeftElement , InputRightElement } from "@chakra-ui/react";
 import useCoveyAppState from "../../hooks/useCoveyAppState";
 import "./TownChat.css";
+
 
 type TownChatProps = {
   messages: ChatMessage[],
@@ -68,13 +69,27 @@ const ChatScreen = ({messages, closeChat, handleMessage} : TownChatProps) => {
           );
         })}
       </div>
-      <input
-        className="App-Textarea"
-        placeholder="Type your messsage here..."
-        onChange={() => setInputMessage(inputMessage)}
-        value={inputMessage}
-        onKeyDown={(e) => onKeyDown(e)}
-      />
+
+      <InputGroup>
+        <InputLeftElement
+          pointerEvents="none"
+          color="gray.300"
+          fontSize="1.2em"
+        >
+          $
+        </InputLeftElement>
+        <Input
+          className="App-Textarea"
+          placeholder="Type your messsage here..."
+          onChange={event => setInputMessage(event.target.value)}
+        />
+        <InputRightElement>
+          <IconButton
+          colorScheme="blue"
+          aria-label="Search database"
+          >Chat</IconButton>
+        </InputRightElement>
+      </InputGroup>
       <p>
         <button type="submit" onClick={() => {
           handleMessage({

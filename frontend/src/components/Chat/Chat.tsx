@@ -26,7 +26,6 @@ const Chat = () => {
   return (
     <div>
       <Button onClick={() => setOpenChat(true)}>Public Chat</Button>
-      {console.log({openChat})}
       {openChat &&
       <ChatScreen messages={messages} closeChat={() => setOpenChat(false)} handleMessage={(m) => console.log(m)}/>}
     </div>)

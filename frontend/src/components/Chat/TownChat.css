@@ -58,7 +58,7 @@
 
 input {
   background: none;
-  color: #fff;
+  color: #1c1c1c !important;;
   margin: 0.5em;
   padding: 10px;
   max-width: 500px;
