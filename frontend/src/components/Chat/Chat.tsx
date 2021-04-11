@@ -40,16 +40,17 @@ const Chat = () =>  {
     observable.subscribe((m: ChatMessageProps) => {
       messages.push(m);
       setMessages( messages );
+      console.log(messages);
     });
-  },[inputMessage])
+  },[ ])
 
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
-    const author = 'Ross';
     if (inputMessage !== '') {
       myContext.send(messageObj);
       setInputMessage('' );
     }
+    setMessages(oldArray => [...oldArray, messageObj]);
   };
 
     return (
