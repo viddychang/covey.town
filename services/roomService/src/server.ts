@@ -22,4 +22,4 @@ server.listen(process.env.PORT || 8081, () => {
   }
 });
 
-export default{ app2 };
+export default { app2 };
