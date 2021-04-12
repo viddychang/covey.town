@@ -9,7 +9,7 @@ import addTownRoutes from './router/towns';
 const app = Express();
 app.use(CORS());
 const server = http.createServer(app);
-let app2 = new ChatServer().app;
+const app2 = new ChatServer().app;
 
 addTownRoutes(server, app);
 
@@ -22,4 +22,4 @@ server.listen(process.env.PORT || 8081, () => {
   }
 });
 
-export { app2 };
+export default { app2 };

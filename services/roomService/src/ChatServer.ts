@@ -2,22 +2,28 @@ import express from 'express';
 import { createServer, Server } from 'http';
 import socketio from 'socket.io';
 
-var cors = require('cors');
+import cors = require('cors');
 
 export enum ChatEvent {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
   MESSAGE = 'message',
 }
+
 export interface ChatMessage {
   author: string;
   message: string;
 }
+
 export class ChatServer {
   public static readonly PORT: number = 8080;
+
   private _app: express.Application;
+
   private server: Server;
+
   private io: socketio.Server;
+  
   private port: string | number;
 
   constructor() {
@@ -32,19 +38,19 @@ export class ChatServer {
 
   private listen(): void {
     this.server.listen(this.port, () => {
-      console.log('Running server on port %s', this.port);
+      // console.log('Running server on port %s', this.port);
     });
 
     this.io.on(ChatEvent.CONNECT, (socket: any) => {
-      console.log('Connected client on port %s.', this.port);
+      // console.log('Connected client on port %s.', this.port);
 
       socket.on(ChatEvent.MESSAGE, (m: ChatMessage) => {
-        console.log('[server](message): %s', JSON.stringify(m));
+        // console.log('[server](message): %s', JSON.stringify(m));
         this.io.emit('message', m);
       });
 
       socket.on(ChatEvent.DISCONNECT, () => {
-        console.log('Client disconnected');
+        // console.log('Client disconnected');
       });
     });
   }
