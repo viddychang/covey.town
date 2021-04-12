@@ -2,8 +2,6 @@ import express from 'express';
 import { createServer, Server } from 'http';
 import socketio from 'socket.io';
 
-const cors = require('cors');
-
 export enum ChatEvent {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
@@ -16,6 +14,7 @@ export interface ChatMessage {
 }
 
 export class ChatServer {
+
   public static readonly PORT: number = 8080;
 
   private _app: express.Application;
@@ -27,6 +26,7 @@ export class ChatServer {
   private port: string | number;
 
   constructor() {
+    const cors = require('cors');
     this._app = express();
     this.port = process.env.PORT || ChatServer.PORT;
     this._app.use(cors());
