@@ -26,6 +26,7 @@ export class ChatServer {
   private port: string | number;
 
   constructor() {
+    /* eslint-disable */
     const cors = require('cors');
     this._app = express();
     this.port = process.env.PORT || ChatServer.PORT;
