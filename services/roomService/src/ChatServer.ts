@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer, Server } from 'http';
 import socketio from 'socket.io';
 
-import cors = require('cors');
+const cors = require('cors');
 
 export enum ChatEvent {
   CONNECT = 'connect',
