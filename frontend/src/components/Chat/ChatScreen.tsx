@@ -3,7 +3,6 @@ import {Button, Input, IconButton, InputGroup, InputLeftElement , InputRightElem
 import useCoveyAppState from "../../hooks/useCoveyAppState";
 import "./TownChat.css";
 
-
 type TownChatProps = {
   messages: ChatMessageProps[],
   closeChat: () => void,
@@ -13,6 +12,7 @@ type TownChatProps = {
 export type ChatMessageProps = {
   message: string,
   author: string,
+  to: string,
   time: string
 }
 

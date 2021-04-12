@@ -45,7 +45,6 @@
 }
 
 .App-chatbox > div {
-  background: #5898c0;
   border-radius: 1em;
   padding: 0.25em 1em;
   font-size: 14px;
@@ -56,9 +55,17 @@
   font-size: 12px;
 }
 
+.Message {
+  background: #5898c0;
+}
+
+.MyMessage {
+  background: #3f994b;
+}
+
 input {
   background: none;
-  color: #1c1c1c !important;;
+  color: #1c1c1c !important;
   margin: 0.5em;
   padding: 10px;
   max-width: 500px;
@@ -67,7 +74,6 @@ input {
   height: 50px;
   border: 1px solid #5898c0;
   border-radius: 10px;
-
 }
 
 ::placeholder {
@@ -92,9 +98,8 @@ button {
   }
 }
 
-
 .rcw-header {
-  background-color:#5898c0;
+  background-color: #5898c0;
   border-radius: 10px 10px 0 0;
   color: white;
   display: flex;
@@ -121,6 +126,3 @@ button {
   margin-right: 10px;
   vertical-align: middle;
 }
-
-
-

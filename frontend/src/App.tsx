@@ -233,7 +233,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
       <div>
         <WorldMap />
         <ChatContext.Provider value={chat}>
-          <Chat />
+          <Chat/>
          </ChatContext.Provider>
         <UsersList />
         <VideoOverlay preferredMode="fullwidth" />

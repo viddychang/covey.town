@@ -1,15 +1,20 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Input, IconButton, InputGroup, InputLeftElement , InputRightElement } from "@chakra-ui/react";
+import {Button, Input, IconButton, InputGroup, InputLeftElement , InputRightElement , Select} from "@chakra-ui/react";
+
+import { CloseIcon } from '@chakra-ui/icons'
 import logo from '../../logo.svg';
 import './TownChat.css';
 import { ChatContext } from './ChatContext';
-import ChatScreen, {ChatMessageProps} from "./ChatScreen";
+import {ChatMessageProps} from "./ChatScreen";
 import useCoveyAppState from "../../hooks/useCoveyAppState";
-
-
+import useUserProfile from "../../hooks/useUserProfile";
 
 const Chat = () =>  {
  // static contextType = ChatContext;
+
+ const {
+   players
+} = useCoveyAppState();
 
   const [openChat, setOpenChat] = useState(false);
   const [inputMessage , setInputMessage] = useState("");
@@ -20,11 +25,12 @@ const Chat = () =>  {
   const today = new Date();
   const time = `${today.getHours()  }:${  today.getMinutes()}`;
 
-
+  const [selectedValue, setselectedValue] = useState("all");
 
   const [messages, setMessages] = useState([{
-    message: 'Welcome! Type a message and press Send Message to continue the chat.',
-    author: 'Bot',
+    message: `Hello ${userName}! Type a message and press Send Message to continue the chat.` ,
+    author: 'Covey Bot',
+    to: 'all',
     time: '22:00'
   }]);
 
@@ -33,6 +39,10 @@ const Chat = () =>  {
   useEffect(() => {
     // this.context;
     // initiate socket connection
+
+    // if(openChatScreen){
+    //   setOpenChat(true); 
+    // }
     myContext.init();
 
     const observable = myContext.onMessage();
@@ -60,9 +70,13 @@ const Chat = () =>  {
         {openChat &&
         <div className='Public-chat'>
           <div className="rcw-header">
-            <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
-              Close
-            </Button>
+            <IconButton 
+              colorScheme="red"
+              aria-label="Close Button"
+              size="lg"
+              onClick={() => setOpenChat(false)}
+              icon={<CloseIcon />}
+            />
             <h4 className="rcw-title">
               <img src="https://img.icons8.com/clouds/2x/real-estate.png" className="avatar" alt="profile" />
               Covey Town Title
@@ -70,23 +84,29 @@ const Chat = () =>  {
             <span>Covey town chat subtitle</span>
           </div>
           <div className="App-chatbox">
-            {messages.map((msg: ChatMessageProps) => {
+            {messages.filter(m => m.to === userName || m.to === 'all' ||m.author === userName)
+            .map((msg: ChatMessageProps) => {
               msgIndex += 1;
               return (
-                <div key={msgIndex}>
+                <div className={msg.author === userName? "MyMessage" : "Message"} key={msgIndex}>
                   <p style={{float: "right"}}>
                     {msg.time}
                   </p>
                   <p>{msg.author}:</p>
+                  {/* <p>{msg.to}, {userName}</p> */}
                   <p>
                     {msg.message}
                   </p>
-
                 </div>
               );
             })}
           </div>
-
+          <Select onChange={(event) => setselectedValue(event.target.value)} variant="outline">
+            <option value="all">Everyone</option>
+            {players.filter(p => p.userName !== userName).map(player => 
+            <option key={player.id} value={player.userName}>{player.userName}</option>
+            )}
+            </Select>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -107,6 +127,7 @@ const Chat = () =>  {
                 onClick={() => handleMessage({
                   message: inputMessage,
                   author: userName,
+                  to: selectedValue,
                   time
                 })}
               >Chat</IconButton>
@@ -117,6 +138,7 @@ const Chat = () =>  {
               handleMessage({
                 message: inputMessage,
                 author: userName,
+                to: selectedValue,
                 time
               })
             }}>
@@ -130,3 +152,4 @@ const Chat = () =>  {
 }
 
 export default Chat;
+

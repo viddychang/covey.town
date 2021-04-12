@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   Button,
   Drawer,
@@ -15,6 +15,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import useCoveyAppState from "../../hooks/useCoveyAppState";
+import Chat from "./Chat";
 
 
 const UsersList = () => {
@@ -22,6 +23,11 @@ const UsersList = () => {
     emitMovement, players,
   } = useCoveyAppState();
   const {isOpen, onOpen, onClose} = useDisclosure()
+  const [isPrivateShown, setPrivateShown] = useState(false);
+  const handlePreview=()=>{
+    onClose(); 
+    setPrivateShown(true); 
+  }
   const btnRef = React.useRef()
   return (
     <>
@@ -44,7 +50,7 @@ const UsersList = () => {
                   {players.map(player => (
                     <Tr key={player.id}>
                       <Td>{player.userName}</Td>
-                      <Td><Button>Chat</Button></Td>
+                      <Td><Button onClick = {handlePreview}>Chat</Button></Td>
                     </Tr>))}
                 </Tbody>
               </Table>
@@ -56,9 +62,10 @@ const UsersList = () => {
               </Button>
               <Button colorScheme="blue">Save</Button>
             </DrawerFooter>
-          </DrawerContent>
+          </DrawerContent>  
         </DrawerOverlay>
       </Drawer>
+      {isPrivateShown && <Chat />}
     </>
 
   )
