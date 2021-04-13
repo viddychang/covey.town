@@ -1,7 +1,6 @@
 import { fromEvent, Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import { ChatMessage } from './types';
-import {ChatMessageProps} from "./ChatScreen";
+import {ChatMessageProps} from "./types";
 
 class SocketService {
   socket = io('localhost:8080', { transports: ['websocket', 'polling', 'flashsocket'] });

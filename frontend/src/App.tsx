@@ -26,7 +26,6 @@ import { Callback } from './components/VideoCall/VideoFrontend/types';
 import Player, { ServerPlayer, UserLocation } from './classes/Player';
 import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
-import UsersList from "./components/Chat/UsersList";
 import Chat from "./components/Chat/Chat";
 import  SocketService  from './components/Chat/SocketService';
 import { ChatContext } from './components/Chat/ChatContext';
@@ -235,7 +234,6 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
         <ChatContext.Provider value={chat}>
           <Chat/>
          </ChatContext.Provider>
-        <UsersList />
         <VideoOverlay preferredMode="fullwidth" />
       </div>
     );

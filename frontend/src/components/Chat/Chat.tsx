@@ -14,8 +14,9 @@ import { nanoid } from 'nanoid';
 import React, { useContext, useEffect, useState } from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import { ChatContext } from './ChatContext';
-import { ChatMessageProps } from './ChatScreen';
 import './TownChat.css';
+import {ChatMessageProps} from "./types";
+
 
 const Chat = () => {
   // static contextType = ChatContext;
@@ -92,7 +93,7 @@ const Chat = () => {
                   className='avatar'
                   alt='profile'
                 />
-                {currentTownFriendlyName} Chat
+                {currentTownFriendlyName} Chat Room
               </h4>
             </Box>
             <Spacer />
