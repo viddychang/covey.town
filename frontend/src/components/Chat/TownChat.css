@@ -24,7 +24,7 @@
   right: 15px;
   border: 3px solid #f1f1f1;
   z-index: 9999;
-  width: 415px;
+  width: 455px;
 }
 
 .App-logo {
@@ -140,7 +140,7 @@ button {
 
 .rcw-close-button {
   margin-top: 20px;
-  background: #0066ff !important;
+  background: #4399e1  !important;
 }
 
 .select-chat {
@@ -148,6 +148,12 @@ button {
   color: white !important;
   border-radius: 5px;
   width: 85%;
-  border: 1px solid #4399e1 !important;
-  margin: 10px;
+  border: 1px solid #4399e1 !important; 
+  /* margin: 10px;*/
+}
+
+.block {
+  color : black;
+  text-align: left;
+  float: left;
 }

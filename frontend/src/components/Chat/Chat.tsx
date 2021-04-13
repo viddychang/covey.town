@@ -27,13 +27,13 @@ const Chat = () => {
   const {players, currentTownFriendlyName} = useCoveyAppState();
 
   const [openChat, setOpenChat] = useState(false);
-  const [inputMessage, setInputMessage] = useState('all');
+  const [inputMessage, setInputMessage] = useState('');
   let msgIndex = 0;
   const {userName} = useCoveyAppState();
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
 
-  const [selectedValue, setselectedValue] = useState('');
+  const [selectedValue, setselectedValue] = useState('all');
 
   const [messages, setMessages] = useState([
     {
@@ -72,11 +72,6 @@ const Chat = () => {
       setInputMessage('');
     }
     setMessages(oldArray => [...oldArray, messageObj]);
-  };
-
-  const handleChange = (event:any) => {
-    console.log({event})
-    setselectedValue(event.target.value);
   };
 
   const onKeyPress = (event: any) => {
@@ -127,9 +122,10 @@ const Chat = () => {
               .map((msg: ChatMessageProps) => {
                 msgIndex += 1;
                 return (
-                  <Box bg='blue.400' key={msg.id} overflow='auto' m='5'>
+                  <Box bg='blue.400' key={msg.id} overflow='auto' m='5'  
+                  className={msg.author === userName ? 'MyMessage' : 'Message'}>
                     <div
-                      className={msg.author === userName ? 'MyMessage' : 'Message'}
+                     
                       key={msgIndex}>
                       <p style={{float: 'right'}}>{msg.time}</p>
                       <p>
@@ -141,6 +137,9 @@ const Chat = () => {
                   </Box>
                 );
               })}
+          </div>
+          <div className='block'>
+            Recipient: 
           </div>
         <Select
         className='select-chat'
@@ -163,13 +162,14 @@ const Chat = () => {
               placeholder='Type your messsage here...'
               onChange={event => setInputMessage(event.target.value)}
               onKeyPress={onKeyPress}
-
+              value={inputMessage}
             />
             <InputRightElement>
               <IconButton
                 colorScheme='twitter'
                 aria-label='Search database'
                 icon={<ArrowForwardIcon/>}
+                isDisabled = {inputMessage === ''}
                 onClick={() =>
                   handleMessage({
                     id: nanoid(),
@@ -182,21 +182,6 @@ const Chat = () => {
               />
             </InputRightElement>
           </InputGroup>
-          <p>
-            <button
-              type='submit'
-              onClick={() => {
-                handleMessage({
-                  id: nanoid(),
-                  message: inputMessage,
-                  author: userName,
-                  to: selectedValue,
-                  time,
-                });
-              }}>
-              Send Message
-            </button>
-          </p>
         </Flex>}
     </div>
   );
