@@ -29,7 +29,7 @@ export class ChatServer {
 
   constructor() {
     this._app = express();
-    this.port = process.env.PORT || ChatServer.PORT;
+    this.port = ChatServer.PORT;
     this._app.use(cors());
     this._app.options('*', cors());
     this.server = createServer(this._app);
@@ -38,8 +38,8 @@ export class ChatServer {
   }
 
   private listen(): void {
-    this.server.listen(this.port, () => {
-      // console.log('Running server on port %s', this.port);
+    this.server.listen(process.env.PORT || this.port, () => {
+      console.log('Running server on port %s', this.port);
     });
 
     this.io.on(ChatEvent.CONNECT, (socket: any) => {
