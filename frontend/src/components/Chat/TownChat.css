@@ -80,6 +80,21 @@ input {
   color: #eee;
 }
 
+.footer {
+  z-index: 99;
+  position: absolute;
+  bottom: 1.1em;
+  right: 1.1em;
+  width: 4em;
+  height: 4em;
+  cursor: pointer;
+  border: 0;
+  background-color: rgba(148, 200, 249, 1);
+  color: white;
+  outline: none !important;
+  transition: background-color 1s ease;
+}
+
 button {
   background: none;
   border: none;
