@@ -9,7 +9,9 @@ import addTownRoutes from './router/towns';
 const app = Express();
 app.use(CORS());
 const server = http.createServer(app);
-// const app2 = new ChatServer().app;
+// call to ChatServer causes heroku to crash 4/13/2021
+
+const app2 = new ChatServer().app;
 
 addTownRoutes(server, app);
 
@@ -22,4 +24,4 @@ server.listen(process.env.PORT || 8081, () => {
   }
 });
 
-// export default { app2 };
+export default { app2 };
