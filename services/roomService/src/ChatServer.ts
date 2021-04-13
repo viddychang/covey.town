@@ -2,6 +2,9 @@ import express from 'express';
 import { createServer, Server } from 'http';
 import socketio from 'socket.io';
 
+/* eslint-disable */
+const cors = require('cors');
+
 export enum ChatEvent {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
@@ -26,8 +29,6 @@ export class ChatServer {
   private port: string | number;
 
   constructor() {
-    /* eslint-disable */
-    const cors = require('cors');
     this._app = express();
     this.port = process.env.PORT || ChatServer.PORT;
     this._app.use(cors());
