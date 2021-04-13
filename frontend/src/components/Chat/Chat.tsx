@@ -145,11 +145,11 @@ const Chat = () => {
         <Select
         className='select-chat'
           onChange={event => setselectedValue(event.target.value)} variant='outline'>
-          <option value='all'>Everyone</option>
+          <option className='select-chat' value='all'>Everyone</option>
           {players
             .filter(p => p.userName !== userName)
             .map(player => (
-              <option key={player.id} value={player.userName}>
+              <option className='select-chat' key={player.id} value={player.userName}>
                 {player.userName}
               </option>
             ))}
