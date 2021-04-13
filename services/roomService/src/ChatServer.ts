@@ -1,7 +1,6 @@
 import express from 'express';
 import { createServer, Server } from 'http';
 import socketio from 'socket.io';
-
 /* eslint-disable */
 const cors = require('cors');
 
@@ -18,7 +17,7 @@ export interface ChatMessage {
 
 export class ChatServer {
 
-  public static readonly PORT: number = 8080;
+  public static readonly PORT: number = 8081;
 
   private _app: express.Application;
 
