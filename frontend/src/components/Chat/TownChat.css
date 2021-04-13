@@ -11,8 +11,9 @@
 }
 
 .Public-chat {
+  background: white;
   text-align: center;
-  min-height: 500px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +23,7 @@
   bottom: 0;
   right: 15px;
   border: 3px solid #f1f1f1;
-  z-index: 9;
+  z-index: 9999;
   width: 415px;
 }
 
@@ -56,11 +57,11 @@
 }
 
 .Message {
-  background: #5898c0;
+  background: #4399e1;
 }
 
 .MyMessage {
-  background: #3f994b;
+  background: #4399e1;
 }
 
 input {
@@ -72,7 +73,7 @@ input {
   width: 100%;
   font-size: 15px;
   height: 50px;
-  border: 1px solid #5898c0;
+  border: 1px solid #4399e1;
   border-radius: 10px;
 }
 
@@ -98,7 +99,7 @@ input {
 button {
   background: none;
   border: none;
-  color: #61dafb;
+  color: #4399e1;
   cursor: pointer;
   font-size: 18px;
   text-decoration: none;
@@ -114,14 +115,14 @@ button {
 }
 
 .rcw-header {
-  background-color: #5898c0;
+  background-color: #4399e1;
   border-radius: 10px 10px 0 0;
   color: white;
   display: flex;
   flex-direction: column;
   text-align: center;
-  padding: 15px 0 25px;
   width: 100%;
+  margin-top: 75px;
 }
 
 .rcw-title {
@@ -130,14 +131,24 @@ button {
   padding: 15px 0;
 }
 
-.rcw-close-button {
-  display: none;
-}
-
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 100%;
   margin-right: 10px;
   vertical-align: middle;
+}
+
+.rcw-close-button {
+  margin-top: 20px;
+  background: black !important;
+}
+
+.select-chat {
+  width: 100%;
+  background: #4399e1;
+  color: white !important;
+  border-radius: 5px;
+  border: 1px solid #4399e1 !important;
+  margin: 10px;
 }

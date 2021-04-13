@@ -1,19 +1,22 @@
-import { ArrowForwardIcon, ChatIcon, CloseIcon } from '@chakra-ui/icons';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import {ArrowForwardIcon, ChatIcon, CloseIcon} from '@chakra-ui/icons';
 import {
-  Box,
+  Box, Button,
   Flex,
   IconButton,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Select,
   Spacer,
+  Grid,
+  GridItem, Avatar
 } from '@chakra-ui/react';
-import { nanoid } from 'nanoid';
-import React, { useContext, useEffect, useState } from 'react';
+import {nanoid} from 'nanoid';
+import React, {useContext, useEffect, useState} from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-import { ChatContext } from './ChatContext';
+import {ChatContext} from './ChatContext';
 import './TownChat.css';
 import {ChatMessageProps} from "./types";
 
@@ -21,16 +24,16 @@ import {ChatMessageProps} from "./types";
 const Chat = () => {
   // static contextType = ChatContext;
 
-  const { players, currentTownFriendlyName } = useCoveyAppState();
+  const {players, currentTownFriendlyName} = useCoveyAppState();
 
   const [openChat, setOpenChat] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   let msgIndex = 0;
-  const { userName } = useCoveyAppState();
+  const {userName} = useCoveyAppState();
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
 
-  const [selectedValue, setselectedValue] = useState('all');
+  const [selectedValue, setselectedValue] = useState('');
 
   const [messages, setMessages] = useState([
     {
@@ -68,45 +71,56 @@ const Chat = () => {
       setInputMessage('');
     }
     setMessages(oldArray => [...oldArray, messageObj]);
+    setInputMessage('');
   };
+
+  const handleChange = (event:any) => {
+    setselectedValue(event.target.value);
+  };
+
+  const onKeyPress = (event: any) => {
+    if (event.charCode === 13) {
+      handleMessage({
+        id: nanoid(),
+        message: inputMessage,
+        author: userName,
+        to: selectedValue,
+        time,
+      })
+    }
+  }
 
   return (
     <div>
       <Flex align='right' justify='right'>
-        <Spacer />
+        <Spacer/>
         <IconButton
           size='lg'
           colorScheme='twitter'
           aria-label='Chat Button'
           className='footer'
-          icon={<ChatIcon />}
+          icon={<ChatIcon/>}
           onClick={() => setOpenChat(true)}
         />
       </Flex>
-      {openChat && (
-        <Flex className='Public-chat'>
-          <Flex className='rcw-header'>
-            <Box p='5'>
-              <h4 className='rcw-title'>
-                <img
-                  src='https://img.icons8.com/clouds/2x/real-estate.png'
-                  className='avatar'
-                  alt='profile'
-                />
-                {currentTownFriendlyName} Chat Room
-              </h4>
-            </Box>
-            <Spacer />
-            <Box p='4'>
-              <IconButton
-                colorScheme='red'
-                aria-label='Close Button'
-                size='lg'
-                onClick={() => setOpenChat(false)}
-                icon={<CloseIcon />}
-              />
-            </Box>
-          </Flex>
+      {openChat && <Flex className='Public-chat'>
+          <div className="rcw-header">
+            <Grid templateColumns="repeat(4, 1fr)" gap={2}>
+              <GridItem colSpan={3}>
+                <h4 className="rcw-title">
+                  <Avatar
+                    src='https://cdn2.iconfinder.com/data/icons/donate-2/64/community-house-city-shop-business-town-512.png'
+                    className="avatar" alt="profile"/>
+                  {currentTownFriendlyName} Chat Room
+                </h4>
+              </GridItem>
+              <GridItem colSpan={1}>
+                <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+                  <CloseIcon/>
+                </Button>
+              </GridItem>
+            </Grid>
+          </div>
           <div className='App-chatbox'>
             {messages
               .filter(m => m.to === userName || m.to === 'all' || m.author === userName)
@@ -117,7 +131,7 @@ const Chat = () => {
                     <div
                       className={msg.author === userName ? 'MyMessage' : 'Message'}
                       key={msgIndex}>
-                      <p style={{ float: 'right' }}>{msg.time}</p>
+                      <p style={{float: 'right'}}>{msg.time}</p>
                       <p>
                         {msg.author} {msg.to === userName ? '(privately)' : ''}:
                       </p>
@@ -128,30 +142,37 @@ const Chat = () => {
                 );
               })}
           </div>
-          <Select onChange={event => setselectedValue(event.target.value)} variant='outline'>
-            <option value='all'>Everyone</option>
+          <Select
+            labelId="demo-simple-select-filled-label"
+            className='select-chat'
+            id="demo-simple-select-filled"
+            value={selectedValue}
+            onChange={handleChange}
+          >
+            <MenuItem value='all'>
+              <em>Everyone</em>
+            </MenuItem>
             {players
               .filter(p => p.userName !== userName)
               .map(player => (
-                <option key={player.id} value={player.userName}>
-                  {player.userName}
-                </option>
+                <MenuItem key={player.id} value={player.userName}>{player.userName}</MenuItem>
               ))}
           </Select>
           <InputGroup>
             <InputLeftElement pointerEvents='none' color='gray.300' fontSize='1.2em'>
-              $
+              <ChatIcon/>
             </InputLeftElement>
             <Input
               className='App-Textarea'
               placeholder='Type your messsage here...'
               onChange={event => setInputMessage(event.target.value)}
+              onKeyPress={onKeyPress}
             />
             <InputRightElement>
               <IconButton
                 colorScheme='twitter'
                 aria-label='Search database'
-                icon={<ArrowForwardIcon />}
+                icon={<ArrowForwardIcon/>}
                 onClick={() =>
                   handleMessage({
                     id: nanoid(),
@@ -179,8 +200,7 @@ const Chat = () => {
               Send Message
             </button>
           </p>
-        </Flex>
-      )}
+        </Flex>}
     </div>
   );
 };
