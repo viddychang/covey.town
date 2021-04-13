@@ -9,7 +9,7 @@ import addTownRoutes from './router/towns';
 const app = Express();
 app.use(CORS());
 const server = http.createServer(app);
-// const app2 = new ChatServer().app;
+const app2 = new ChatServer().app;
 
 addTownRoutes(server, app);
 
