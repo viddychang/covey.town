@@ -1,5 +1,4 @@
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+
 import {ArrowForwardIcon, ChatIcon, CloseIcon} from '@chakra-ui/icons';
 import {
   Box, Button,
@@ -11,7 +10,8 @@ import {
   InputRightElement,
   Spacer,
   Grid,
-  GridItem, Avatar
+  GridItem, Avatar,
+  Select
 } from '@chakra-ui/react';
 import {nanoid} from 'nanoid';
 import React, {useContext, useEffect, useState} from 'react';
@@ -27,7 +27,7 @@ const Chat = () => {
   const {players, currentTownFriendlyName} = useCoveyAppState();
 
   const [openChat, setOpenChat] = useState(false);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState('all');
   let msgIndex = 0;
   const {userName} = useCoveyAppState();
   const today = new Date();
@@ -62,6 +62,7 @@ const Chat = () => {
       messages.push(m);
       setMessages(messages);
       console.log(messages);
+      setInputMessage('');
     });
   }, []);
 
@@ -71,10 +72,10 @@ const Chat = () => {
       setInputMessage('');
     }
     setMessages(oldArray => [...oldArray, messageObj]);
-    setInputMessage('');
   };
 
   const handleChange = (event:any) => {
+    console.log({event})
     setselectedValue(event.target.value);
   };
 
@@ -123,7 +124,6 @@ const Chat = () => {
           </div>
           <div className='App-chatbox'>
             {messages
-              .filter(m => m.to === userName || m.to === 'all' || m.author === userName)
               .map((msg: ChatMessageProps) => {
                 msgIndex += 1;
                 return (
@@ -142,22 +142,16 @@ const Chat = () => {
                 );
               })}
           </div>
-          <Select
-            labelId="demo-simple-select-filled-label"
-            className='select-chat'
-            id="demo-simple-select-filled"
-            value={selectedValue}
-            onChange={handleChange}
-          >
-            <MenuItem value='all'>
-              <em>Everyone</em>
-            </MenuItem>
-            {players
-              .filter(p => p.userName !== userName)
-              .map(player => (
-                <MenuItem key={player.id} value={player.userName}>{player.userName}</MenuItem>
-              ))}
-          </Select>
+        <Select onChange={event => setselectedValue(event.target.value)} variant='outline'>
+          <option value='all'>Everyone</option>
+          {players
+            .filter(p => p.userName !== userName)
+            .map(player => (
+              <option key={player.id} value={player.userName}>
+                {player.userName}
+              </option>
+            ))}
+        </Select>
           <InputGroup>
             <InputLeftElement pointerEvents='none' color='gray.300' fontSize='1.2em'>
               <ChatIcon/>
