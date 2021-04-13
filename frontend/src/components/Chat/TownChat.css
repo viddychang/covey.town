@@ -99,7 +99,7 @@ input {
 button {
   background: none;
   border: none;
-  color: #4399e1;
+  color: #0066ff;
   cursor: pointer;
   font-size: 18px;
   text-decoration: none;
@@ -140,14 +140,14 @@ button {
 
 .rcw-close-button {
   margin-top: 20px;
-  background: black !important;
+  background: #0066ff !important;
 }
 
 .select-chat {
-  width: 100%;
-  background: #4399e1;
+  background: #4399e1 !important;
   color: white !important;
   border-radius: 5px;
+  width: 95%;
   border: 1px solid #4399e1 !important;
   margin: 10px;
 }

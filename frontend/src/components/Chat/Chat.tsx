@@ -142,7 +142,9 @@ const Chat = () => {
                 );
               })}
           </div>
-        <Select onChange={event => setselectedValue(event.target.value)} variant='outline'>
+        <Select
+        className='select-chat'
+          onChange={event => setselectedValue(event.target.value)} variant='outline'>
           <option value='all'>Everyone</option>
           {players
             .filter(p => p.userName !== userName)
@@ -161,6 +163,7 @@ const Chat = () => {
               placeholder='Type your messsage here...'
               onChange={event => setInputMessage(event.target.value)}
               onKeyPress={onKeyPress}
+
             />
             <InputRightElement>
               <IconButton
