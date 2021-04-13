@@ -1,4 +1,7 @@
-var mongoose = require('mongoose');
+
+/* eslint-disable */
+const mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost/coveytown-chat');
 
 const messageEntry = require('./models/message.model.js');

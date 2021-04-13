@@ -1,3 +1,5 @@
+
+/* eslint-disable */
 const mongoose = require('mongoose');
 /*const beautifyUnique = require('mongoose-beautiful-unique-validation');
 
@@ -6,9 +8,9 @@ mongoose.plugin(beautifyUnique, {
 });
 mongoose.set('useCreateIndex', true);*/
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var roomSchema = new Schema({
+const roomSchema = new Schema({
   roomId: { type: String, unique: true },
   friendlyName: String,
   isPublic: Boolean,
@@ -16,5 +18,5 @@ var roomSchema = new Schema({
 });
 
 //roomSchema.plugin(beautifyUnique);
-var room = mongoose.model('roomEntry', roomSchema);
+const room = mongoose.model('roomEntry', roomSchema);
 module.exports = room;
