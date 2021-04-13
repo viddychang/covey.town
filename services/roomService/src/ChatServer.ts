@@ -17,7 +17,7 @@ export interface ChatMessage {
 
 export class ChatServer {
 
-  public static readonly PORT: number = 8081;
+  public static readonly PORT: number = 8080;
 
   private _app: express.Application;
 
