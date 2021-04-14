@@ -71,6 +71,11 @@ const Chat = () => {
     video?.pauseGame();
   };
 
+  const closedChat = (state: boolean) => {
+    setOpenChat(state);
+    video?.unPauseGame();
+  };
+
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
     const messagesArr = [] as ChatMessage[];
@@ -182,7 +187,7 @@ const Chat = () => {
                       </h4>
                   </GridItem>
                   <GridItem colSpan={1}>
-                      <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+                      <Button className="rcw-close-button" onClick={() => closedChat(false)}>
                           <CloseIcon/>
                       </Button>
                   </GridItem>
