@@ -1,4 +1,3 @@
-
 import {ArrowForwardIcon, ChatIcon, CloseIcon} from '@chakra-ui/icons';
 import {
   Box, Button,
@@ -13,6 +12,7 @@ import {
   GridItem, Avatar,
   Select
 } from '@chakra-ui/react';
+import _ from 'underscore';
 import {nanoid} from 'nanoid';
 import React, {useContext, useEffect, useState} from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
@@ -65,7 +65,7 @@ const Chat = () => {
       console.log(messages);
       setInputMessage('');
     });
-  }, []);
+  }, [messages]);
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
@@ -102,89 +102,85 @@ const Chat = () => {
       </Flex>
       {openChat && <Flex className='Public-chat'>
           <div className="rcw-header">
-            <Grid templateColumns="repeat(4, 1fr)" gap={2}>
-              <GridItem colSpan={3}>
-                <h4 className="rcw-title">
-                  <Avatar
-                    src='https://cdn2.iconfinder.com/data/icons/donate-2/64/community-house-city-shop-business-town-512.png'
-                    className="avatar" alt="profile"/>
-                  {currentTownFriendlyName} Chat Room
-                </h4>
-              </GridItem>
-              <GridItem colSpan={1}>
-                <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
-                  <CloseIcon/>
-                </Button>
-              </GridItem>
-            </Grid>
+              <Grid templateColumns="repeat(4, 1fr)" gap={2}>
+                  <GridItem colSpan={3}>
+                      <h4 className="rcw-title">
+                          <Avatar
+                              src='https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Chat-2-512.png'
+                              className="avatar" alt="profile"/>
+                        {currentTownFriendlyName} Chat Room
+                      </h4>
+                  </GridItem>
+                  <GridItem colSpan={1}>
+                      <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+                          <CloseIcon/>
+                      </Button>
+                  </GridItem>
+              </Grid>
           </div>
           <div className='App-chatbox'>
-            {messages
-            .filter((m ) => m.to === userName || m.to === 'all' || m.author === userName )
-              .map((msg: ChatMessageProps) => {
-                msgIndex += 1;
-                return (
-                  <Box bg='blue.400' key={msg.id} overflow='auto' m='5'  
-                  className={msg.author === userName ? 'MyMessage' : 'Message'}>
-                    <div
-                     
-                      key={msgIndex}>
-                      <p style={{float: 'right'}}>{msg.time}</p>
-                      <p>
-                        {msg.author} {msg.to === userName ? '(privately)' : ''}:
-                      </p>
-                      {/* <p>{msg.to}, {userName}</p> */}
-                      <p>{msg.message}</p>
-                    </div>
-                  </Box>
-                );
-              })}
+            {
+              _.uniq(messages, 'id')
+                .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
+                .map((msg: ChatMessageProps) => {
+                  msgIndex += 1;
+                  return (
+                    <Box key={msg.id} overflow='auto' m='5'
+                         className={msg.author === userName ? 'MyMessage' : 'Message'}>
+                      <div
+                        key={msgIndex}>
+                        <p style={{float: 'right'}}>{msg.time}</p>
+                        <p>
+                          {msg.author} {msg.to === userName ? '(privately)' : ''}:
+                        </p>
+                        {/* <p>{msg.to}, {userName}</p> */}
+                        <p>{msg.message}</p>
+                      </div>
+                    </Box>
+                  );
+                })}
           </div>
-          <div className='block'>
-            Recipient: 
-          </div>
-        <Select
-        className='select-chat'
-          onChange={event => setselectedValue(event.target.value)} variant='outline'>
-          <option className='select-chat' value='all'>Everyone</option>
-          {players
-            .filter(p => p.userName !== userName)
-            .map(player => (
-              <option className='select-chat' key={player.id} value={player.userName}>
-                {player.userName}
-              </option>
-            ))}
-        </Select>
           <InputGroup>
-            <InputLeftElement pointerEvents='none' color='gray.300' fontSize='1.2em'>
-              <ChatIcon/>
-            </InputLeftElement>
-            <Input
-              className='App-Textarea'
-              placeholder='Type your messsage here...'
-              onChange={event => setInputMessage(event.target.value)}
-              onKeyPress={onKeyPress}
-              value={inputMessage}
-            />
-            <InputRightElement>
-              <IconButton
-                colorScheme='twitter'
-                aria-label='Search database'
-                icon={<ArrowForwardIcon/>}
-                isDisabled = {inputMessage === ''}
-                onClick={() =>
-                  handleMessage({
-                    id: nanoid(),
-                    message: inputMessage,
-                    author: userName,
-                    to: selectedValue,
-                    time,
-                  })
-                }
+              <Select
+                  className='select-chat'
+                  onChange={event => setselectedValue(event.target.value)}
+                  variant='outline'>
+                  <option value="" selected disabled hidden>Recipient</option>
+                  <option className='select-chat' value='all'>Everyone</option>
+                {players
+                  .filter(p => p.userName !== userName)
+                  .map(player => (
+                    <option className='select-chat' key={player.id} value={player.userName}>
+                      {player.userName}
+                    </option>
+                  ))}
+              </Select>
+              <Input
+                  className='App-Textarea'
+                  placeholder='Type your message...'
+                  // onKeyPress={onKeyPress}
+                  onChange={event => setInputMessage(event.target.value)}
+                  value={inputMessage}
               />
-            </InputRightElement>
+              <InputRightElement>
+                  <IconButton
+                      colorScheme='twitter'
+                      aria-label='Search database'
+                      icon={<ArrowForwardIcon/>}
+                      isDisabled={inputMessage === ''}
+                      onClick={() =>
+                        handleMessage({
+                          id: nanoid(),
+                          message: inputMessage,
+                          author: userName,
+                          to: selectedValue,
+                          time,
+                        })
+                      }
+                  />
+              </InputRightElement>
           </InputGroup>
-        </Flex>}
+      </Flex>}
     </div>
   );
 };
