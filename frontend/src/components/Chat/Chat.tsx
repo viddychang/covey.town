@@ -42,17 +42,17 @@ export type MessageFromDB = {
 const Chat = () => {
   // static contextType = ChatContext;
 
-  const {players, currentTownFriendlyName, currentTownID} = useCoveyAppState();
-
-  const [openChat, setOpenChat] = useState(false);
-  const [inputMessage, setInputMessage] = useState('');
+  // Constants used
+  const {players, currentTownFriendlyName, currentTownID, userName} = useCoveyAppState();
   let msgIndex = 0;
-  const {userName} = useCoveyAppState();
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
+  const myContext = useContext(ChatContext);
 
+  // React hooks
+  const [openChat, setOpenChat] = useState(false);
+  const [inputMessage, setInputMessage] = useState('');
   const [selectedValue, setselectedValue] = useState('all');
-
   const [messages, setMessages] = useState([
     {
       id: '1',
@@ -63,22 +63,27 @@ const Chat = () => {
     },
   ]);
 
-  const myContext = useContext(ChatContext);
-
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
     const messagesArr = [] as ChatMessage[];
     messagesFromDB.forEach((chat) => {
       const timeStamp = new Date(chat.timestamp);
       const chatMessage = {
-        id: chat._id,
-        message: chat.message,
-        author: chat.from,
-        to: 'all',
-        time: `${timeStamp.getHours()}:${timeStamp.getMinutes()}`
+        id: '',
+        message: '',
+        author: '',
+        to: '',
+        time: ''
       }
-      messagesArr.push(chatMessage)
-    })
+      if (chat.to === 'all') {
+        chatMessage.id = chat._id;
+        chatMessage.message = chat.message;
+        chatMessage.author = chat.from;
+        chatMessage.to = 'all';
+        chatMessage.time = `${timeStamp.getHours()}:${timeStamp.getMinutes()}`;
+        messagesArr.push(chatMessage)
+      }
+    });
     return (messagesArr);
   }
 
@@ -112,6 +117,21 @@ const Chat = () => {
     if (inputMessage !== '') {
       myContext.send(messageObj);
       setInputMessage('');
+
+      // Insert the message into DB
+      fetch(`${messagesRESTURL}/message`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: userName,
+          to: selectedValue,
+          message: inputMessage,
+          roomId: currentTownID,
+        })
+      }) .then((res) => console.log("Message posted successfully:", res.json()));
     }
     setMessages(oldArray => [...oldArray, messageObj]);
   };
