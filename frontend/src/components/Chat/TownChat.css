@@ -57,11 +57,15 @@
 }
 
 .Message {
-  background: #4399e1;
+  background: cornflowerblue;
+  float: left;
+  width: 80%;
 }
 
 .MyMessage {
-  background: #4399e1;
+  background: lightseagreen;
+  float: right;
+  width: 80%;
 }
 
 input {
@@ -140,20 +144,20 @@ button {
 
 .rcw-close-button {
   margin-top: 20px;
-  background: #4399e1  !important;
+  background: #4399e1 !important;
 }
 
 .select-chat {
-  background: #4399e1 !important;
+  background: cornflowerblue !important;
   color: white !important;
   border-radius: 5px;
-  width: 85%;
-  border: 1px solid #4399e1 !important; 
+  width: 95% !important;
+  float: left;
   /* margin: 10px;*/
 }
 
 .block {
-  color : black;
+  color: black;
   text-align: left;
   float: left;
 }
