@@ -61,6 +61,7 @@ const Chat = () => {
     observable.subscribe((m: ChatMessageProps) => {
       messages.push(m);
       setMessages(messages);
+      console.log("useeffect:");
       console.log(messages);
       setInputMessage('');
     });
@@ -119,6 +120,7 @@ const Chat = () => {
           </div>
           <div className='App-chatbox'>
             {messages
+            .filter((m ) => m.to === userName || m.to === 'all' || m.author === userName )
               .map((msg: ChatMessageProps) => {
                 msgIndex += 1;
                 return (
