@@ -49,8 +49,7 @@ const Chat = () => {
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
   const myContext = useContext(ChatContext);
-  const video = useMaybeVideo()
-
+  const video = useMaybeVideo();
 
   // React hooks
   const [openChat, setOpenChat] = useState(false);
@@ -201,7 +200,8 @@ const Chat = () => {
                   msgIndex += 1;
                   return (
                     <Box key={msg.id} overflow='auto' m='5'
-                         className={msg.author === userName ? 'MyMessage' : 'Message'}>
+                         className={msg.author === userName ? 'MyMessage' : 'Message'}
+                         color={msg.to === userName ? 'black' : 'white'}>
                       <div
                         ref={el => {
                           if (el != null) {
