@@ -20,11 +20,29 @@ import {ChatContext} from './ChatContext';
 import './TownChat.css';
 import {ChatMessageProps} from "./types";
 
+const messagesRESTURL = "http://localhost:3001"
+
+export type ChatMessage = {
+  id: string,
+  message: string,
+  author: string,
+  to: string,
+  time: string
+}
+
+export type MessageFromDB = {
+  _id: string,
+  from: string,
+  to: string,
+  message: string,
+  roomId: string,
+  timestamp: string
+}
 
 const Chat = () => {
   // static contextType = ChatContext;
 
-  const {players, currentTownFriendlyName} = useCoveyAppState();
+  const {players, currentTownFriendlyName, currentTownID} = useCoveyAppState();
 
   const [openChat, setOpenChat] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -47,13 +65,38 @@ const Chat = () => {
 
   const myContext = useContext(ChatContext);
 
-  useEffect(() => {
-    // this.context;
-    // initiate socket connection
+  // Function to convert the messages stored in DB to the format of chat displayed in the chat box
+  const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
+    const messagesArr = [] as ChatMessage[];
+    messagesFromDB.forEach((chat) => {
+      const timeStamp = new Date(chat.timestamp);
+      const chatMessage = {
+        id: chat._id,
+        message: chat.message,
+        author: chat.from,
+        to: 'all',
+        time: `${timeStamp.getHours()}:${timeStamp.getMinutes()}`
+      }
+      messagesArr.push(chatMessage)
+    })
+    return (messagesArr);
+  }
 
-    // if(openChatScreen){
-    //   setOpenChat(true);
-    // }
+  // This useEffect runs on page load and populates the chat box with previous messages
+  useEffect(() => {
+    // Fetching all the stored meesages for the current town
+    const messagesResponse = `${messagesRESTURL}/fetchAllMessages/${currentTownID}`;
+    fetch(messagesResponse)
+      .then((res) => res.json())
+      .then((messagesFromDB) => {
+        const messageHistory = convertMessagesToChat(messagesFromDB)
+        setMessages(oldArray => [...oldArray, ...messageHistory]);
+      });
+  }, [])
+
+  useEffect(() => {
+
+    // Listening for messages and broadcasting it.
     myContext.init();
 
     const observable = myContext.onMessage();
@@ -61,8 +104,6 @@ const Chat = () => {
     observable.subscribe((m: ChatMessageProps) => {
       messages.push(m);
       setMessages(messages);
-      console.log("useeffect:");
-      console.log(messages);
       setInputMessage('');
     });
   }, [messages]);
@@ -102,85 +143,91 @@ const Chat = () => {
         />
       </Flex>
       {openChat && <Flex className='Public-chat'>
-          <div className="rcw-header">
-              <Grid templateColumns="repeat(4, 1fr)" gap={2}>
-                  <GridItem colSpan={3}>
-                      <h4 className="rcw-title">
-                          <Avatar
-                              src='https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Chat-2-512.png'
-                              className="avatar" alt="profile"/>
-                        {currentTownFriendlyName} Chat Room
-                      </h4>
-                  </GridItem>
-                  <GridItem colSpan={1}>
-                      <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
-                          <CloseIcon/>
-                      </Button>
-                  </GridItem>
-              </Grid>
-          </div>
-          <div className='App-chatbox'>
-            {
-              _.uniq(messages, 'id')
-                .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
-                .map((msg: ChatMessageProps) => {
-                  msgIndex += 1;
-                  return (
-                    <Box key={msg.id} overflow='auto' m='5'
-                         className={msg.author === userName ? 'MyMessage' : 'Message'}>
-                      <div
-                        key={msgIndex}>
-                        <p style={{float: 'right'}}>{msg.time}</p>
-                        <p>
-                          {msg.author} {msg.to === userName ? '(privately)' : ''}:
-                        </p>
-                        {/* <p>{msg.to}, {userName}</p> */}
-                        <p>{msg.message}</p>
-                      </div>
-                    </Box>
-                  );
-                })}
-          </div>
-          <InputGroup>
-              <Select
-                  className='select-chat'
-                  onChange={event => setselectedValue(event.target.value)}
-                  variant='outline'>
-                  <option value="" selected disabled hidden>Recipient</option>
-                  <option className='select-chat' value='all'>Everyone</option>
-                {players
-                  .filter(p => p.userName !== userName)
-                  .map(player => (
-                    <option className='select-chat' key={player.id} value={player.userName}>
-                      {player.userName}
-                    </option>
-                  ))}
-              </Select>
-              <Input
-                  className='App-Textarea'
-                  placeholder='Type your message...'
-                // onKeyPress={onKeyPress}
-                  onChange={event => setInputMessage(event.target.value)}
-                  value={inputMessage}
-              />
-              <InputRightElement>
-                  <IconButton
-                      colorScheme='twitter'
-                      aria-label='Search database'
-                      icon={<ArrowForwardIcon/>}
-                      isDisabled={inputMessage === ''}
-                      onClick={() =>
-                        handleMessage({
-                          id: nanoid(),
-                          message: inputMessage,
-                          author: userName,
-                          to: selectedValue,
-                          time,
-                        })
-                      }
-                  />
-              </InputRightElement>
-          </InputGroup>
+        <div className="rcw-header">
+          <Grid templateColumns="repeat(4, 1fr)" gap={2}>
+            <GridItem colSpan={3}>
+              <h4 className="rcw-title">
+                <Avatar
+                  src='https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Chat-2-512.png'
+                  className="avatar" alt="profile"/>
+                {currentTownFriendlyName} Chat Room
+              </h4>
+            </GridItem>
+            <GridItem colSpan={1}>
+              <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+                <CloseIcon/>
+              </Button>
+            </GridItem>
+          </Grid>
+        </div>
+        <div className='App-chatbox'>
+          {
+            _.uniq(messages, 'id')
+              .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
+              .map((msg: ChatMessageProps) => {
+                msgIndex += 1;
+                return (
+                  <Box key={msg.id} overflow='auto' m='5'
+                       className={msg.author === userName ? 'MyMessage' : 'Message'}>
+                    <div
+                      ref={el => {
+                        if(el != null) {
+                          return (el.scrollIntoView())
+                        }
+                        return null;
+                      }}
+                      key={msgIndex}>
+                      <p style={{float: 'right'}}>{msg.time}</p>
+                      <p>
+                        {msg.author} {msg.to === userName ? '(privately)' : ''}:
+                      </p>
+                      {/* <p>{msg.to}, {userName}</p> */}
+                      <p>{msg.message}</p>
+                    </div>
+                  </Box>
+                );
+              })}
+        </div>
+        <InputGroup>
+          <Select
+            className='select-chat'
+            onChange={event => setselectedValue(event.target.value)}
+            variant='outline'>
+            <option value="" selected disabled hidden>Recipient</option>
+            <option className='select-chat' value='all'>Everyone</option>
+            {players
+              .filter(p => p.userName !== userName)
+              .map(player => (
+                <option className='select-chat' key={player.id} value={player.userName}>
+                  {player.userName}
+                </option>
+              ))}
+          </Select>
+          <Input
+            className='App-Textarea'
+            placeholder='Type your message...'
+            onKeyPress={onKeyPress}
+            onChange={event => setInputMessage(event.target.value)}
+            value={inputMessage}
+          />
+          <InputRightElement>
+            <IconButton
+              colorScheme='twitter'
+              aria-label='Search database'
+              icon={<ArrowForwardIcon/>}
+              isDisabled={inputMessage === ''}
+              onClick={() =>
+                handleMessage({
+                  id: nanoid(),
+                  message: inputMessage,
+                  author: userName,
+                  to: selectedValue,
+                  time,
+                })
+              }
+            />
+          </InputRightElement>
+        </InputGroup>
       </Flex>}
     </div>
   );

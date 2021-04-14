@@ -1,9 +1,10 @@
 /* eslint-disable */
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://covey-town-admin:CoveyTown@cluster0.cnmfz.mongodb.net/coveytown-chat?retryWrites=true&w=majority');
-// mongodb+srv://user1:<user1>@cluster0.cnmfz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
+// mongoose.connect('mongodb://localhost/coveytown-chat');
+mongoose.connect(
+  'mongodb+srv://covey-town-admin:CoveyTown@cluster0.cnmfz.mongodb.net/coveytown-chat?retryWrites=true&w=majority',
+);
 
 const messageEntry = require('./models/message.model.js');
 const roomEntry = require('./models/room.model.js');
