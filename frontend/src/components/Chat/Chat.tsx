@@ -19,6 +19,7 @@ import useCoveyAppState from '../../hooks/useCoveyAppState';
 import {ChatContext} from './ChatContext';
 import './TownChat.css';
 import {ChatMessageProps} from "./types";
+import useMaybeVideo from "../../hooks/useMaybeVideo";
 
 const messagesRESTURL = "http://localhost:3001"
 
@@ -48,6 +49,8 @@ const Chat = () => {
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
   const myContext = useContext(ChatContext);
+  const video = useMaybeVideo()
+
 
   // React hooks
   const [openChat, setOpenChat] = useState(false);
@@ -62,6 +65,11 @@ const Chat = () => {
       time: '22:00',
     },
   ]);
+
+  const openedChat = (state: boolean) => {
+    setOpenChat(state);
+    video?.pauseGame();
+  };
 
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
@@ -131,7 +139,7 @@ const Chat = () => {
           message: inputMessage,
           roomId: currentTownID,
         })
-      }) .then((res) => console.log("Message posted successfully:", res.json()));
+      }).then((res) => console.log("Message posted successfully:", res.json()));
     }
     setMessages(oldArray => [...oldArray, messageObj]);
   };
@@ -159,95 +167,96 @@ const Chat = () => {
           aria-label='Chat Button'
           className='footer'
           icon={<ChatIcon/>}
-          onClick={() => setOpenChat(true)}
+          onClick={() => openedChat(true)}
         />
       </Flex>
       {openChat && <Flex className='Public-chat'>
-        <div className="rcw-header">
-          <Grid templateColumns="repeat(4, 1fr)" gap={2}>
-            <GridItem colSpan={3}>
-              <h4 className="rcw-title">
-                <Avatar
-                  src='https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Chat-2-512.png'
-                  className="avatar" alt="profile"/>
-                {currentTownFriendlyName} Chat Room
-              </h4>
-            </GridItem>
-            <GridItem colSpan={1}>
-              <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
-                <CloseIcon/>
-              </Button>
-            </GridItem>
-          </Grid>
-        </div>
-        <div className='App-chatbox'>
-          {
-            _.uniq(messages, 'id')
-              .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
-              .map((msg: ChatMessageProps) => {
-                msgIndex += 1;
-                return (
-                  <Box key={msg.id} overflow='auto' m='5'
-                       className={msg.author === userName ? 'MyMessage' : 'Message'}>
-                    <div
-                      ref={el => {
-                        if(el != null) {
-                          return (el.scrollIntoView())
-                        }
-                        return null;
-                      }}
-                      key={msgIndex}>
-                      <p style={{float: 'right'}}>{msg.time}</p>
-                      <p>
-                        {msg.author} {msg.to === userName ? '(privately)' : ''}:
-                      </p>
-                      {/* <p>{msg.to}, {userName}</p> */}
-                      <p>{msg.message}</p>
-                    </div>
-                  </Box>
-                );
-              })}
-        </div>
-        <InputGroup>
-          <Select
-            className='select-chat'
-            onChange={event => setselectedValue(event.target.value)}
-            variant='outline'>
-            <option value="" selected disabled hidden>Recipient</option>
-            <option className='select-chat' value='all'>Everyone</option>
-            {players
-              .filter(p => p.userName !== userName)
-              .map(player => (
-                <option className='select-chat' key={player.id} value={player.userName}>
-                  {player.userName}
-                </option>
-              ))}
-          </Select>
-          <Input
-            className='App-Textarea'
-            placeholder='Type your message...'
-            onKeyPress={onKeyPress}
-            onChange={event => setInputMessage(event.target.value)}
-            value={inputMessage}
-          />
-          <InputRightElement>
-            <IconButton
-              colorScheme='twitter'
-              aria-label='Search database'
-              icon={<ArrowForwardIcon/>}
-              isDisabled={inputMessage === ''}
-              onClick={() =>
-                handleMessage({
-                  id: nanoid(),
-                  message: inputMessage,
-                  author: userName,
-                  to: selectedValue,
-                  time,
-                })
-              }
-            />
-          </InputRightElement>
-        </InputGroup>
+          <div className="rcw-header">
+              <Grid templateColumns="repeat(4, 1fr)" gap={2}>
+                  <GridItem colSpan={3}>
+                      <h4 className="rcw-title">
+                          <Avatar
+                              src='https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Chat-2-512.png'
+                              className="avatar" alt="profile"/>
+                        {currentTownFriendlyName} Chat Room
+                      </h4>
+                  </GridItem>
+                  <GridItem colSpan={1}>
+                      <Button className="rcw-close-button" onClick={() => setOpenChat(false)}>
+                          <CloseIcon/>
+                      </Button>
+                  </GridItem>
+              </Grid>
+          </div>
+          <div className='App-chatbox'>
+            {
+              _.uniq(messages, 'id')
+                .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
+                .map((msg: ChatMessageProps) => {
+                  msgIndex += 1;
+                  return (
+                    <Box key={msg.id} overflow='auto' m='5'
+                         className={msg.author === userName ? 'MyMessage' : 'Message'}>
+                      <div
+                        ref={el => {
+                          if (el != null) {
+                            return (el.scrollIntoView())
+                          }
+                          return null;
+                        }}
+                        key={msgIndex}>
+                        <p style={{float: 'right'}}>{msg.time}</p>
+                        <p>
+                          {msg.author} {msg.to === userName ? '(privately)' : ''}:
+                        </p>
+                        {/* <p>{msg.to}, {userName}</p> */}
+                        <p>{msg.message}</p>
+                      </div>
+                    </Box>
+                  );
+                })}
+          </div>
+          <InputGroup>
+              <Select
+                  className='select-chat'
+                  onChange={event => setselectedValue(event.target.value)}
+                  variant='outline'>
+                  <option value="" selected disabled hidden>Recipient</option>
+                  <option className='select-chat' value='all'>Everyone</option>
+                {players
+                  .filter(p => p.userName !== userName)
+                  .map(player => (
+                    <option className='select-chat' key={player.id} value={player.userName}>
+                      {player.userName}
+                    </option>
+                  ))}
+              </Select>
+              <Input
+                  type='text'
+                  className='App-Textarea'
+                  placeholder='Type your message...'
+                  onKeyPress={onKeyPress}
+                  onChange={event => setInputMessage(event.target.value)}
+                  value={inputMessage}
+              />
+              <InputRightElement>
+                  <IconButton
+                      colorScheme='twitter'
+                      aria-label='Search database'
+                      icon={<ArrowForwardIcon/>}
+                      isDisabled={inputMessage === ''}
+                      onClick={() =>
+                        handleMessage({
+                          id: nanoid(),
+                          message: inputMessage,
+                          author: userName,
+                          to: selectedValue,
+                          time,
+                        })
+                      }
+                  />
+              </InputRightElement>
+          </InputGroup>
       </Flex>}
     </div>
   );
