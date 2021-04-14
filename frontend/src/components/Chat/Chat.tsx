@@ -65,7 +65,7 @@ const Chat = () => {
       console.log(messages);
       setInputMessage('');
     });
-  }, []);
+  }, [messages]);
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
@@ -158,7 +158,7 @@ const Chat = () => {
               <Input
                   className='App-Textarea'
                   placeholder='Type your message...'
-                  onKeyPress={onKeyPress}
+                  // onKeyPress={onKeyPress}
                   onChange={event => setInputMessage(event.target.value)}
                   value={inputMessage}
               />
