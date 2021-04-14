@@ -93,6 +93,7 @@ const Chat = () => {
         <Spacer/>
         <IconButton
           size='lg'
+          position='fixed'
           colorScheme='twitter'
           aria-label='Chat Button'
           className='footer'
@@ -158,7 +159,7 @@ const Chat = () => {
               <Input
                   className='App-Textarea'
                   placeholder='Type your message...'
-                  // onKeyPress={onKeyPress}
+                // onKeyPress={onKeyPress}
                   onChange={event => setInputMessage(event.target.value)}
                   value={inputMessage}
               />
