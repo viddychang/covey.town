@@ -12,12 +12,14 @@ import {
   GridItem, Avatar,
   Select
 } from '@chakra-ui/react';
+import 'emoji-mart/css/emoji-mart.css';
 import _ from 'underscore';
 import {nanoid} from 'nanoid';
 import React, {useContext, useEffect, useState} from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import {ChatContext} from './ChatContext';
 import './TownChat.css';
+import EmojiInput from './EmojiInput';
 import {ChatMessageProps} from "./types";
 import useMaybeVideo from "../../hooks/useMaybeVideo";
 
@@ -74,6 +76,7 @@ const Chat = () => {
     setOpenChat(state);
     video?.unPauseGame();
   };
+  
 
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
@@ -160,6 +163,11 @@ const Chat = () => {
     }
   }
 
+  const emojiInserted = (messageWithEmoji: string) => {
+    setInputMessage(inputMessage + messageWithEmoji );
+  };
+
+
   return (
     <div>
       <Flex align='right' justify='right'>
@@ -244,6 +252,9 @@ const Chat = () => {
                   onChange={event => setInputMessage(event.target.value)}
                   value={inputMessage}
               />
+               <span style={{float: 'left'}}>
+               <EmojiInput value={inputMessage} onSelection={emojiInserted} />
+              </span>
               <InputRightElement>
                   <IconButton
                       colorScheme='twitter'
