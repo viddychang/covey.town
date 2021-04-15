@@ -76,7 +76,7 @@ const Chat = () => {
     setOpenChat(state);
     video?.unPauseGame();
   };
-  
+
 
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
@@ -164,7 +164,7 @@ const Chat = () => {
   }
 
   const emojiInserted = (messageWithEmoji: string) => {
-    setInputMessage(inputMessage + messageWithEmoji );
+    setInputMessage(`${  messageWithEmoji}`);
   };
 
 
@@ -252,26 +252,22 @@ const Chat = () => {
                   onChange={event => setInputMessage(event.target.value)}
                   value={inputMessage}
               />
-               <span style={{float: 'left'}}>
-               <EmojiInput value={inputMessage} onSelection={emojiInserted} />
-              </span>
-              <InputRightElement>
-                  <IconButton
-                      colorScheme='twitter'
-                      aria-label='Search database'
-                      icon={<ArrowForwardIcon/>}
-                      isDisabled={inputMessage === ''}
-                      onClick={() =>
-                        handleMessage({
-                          id: nanoid(),
-                          message: inputMessage,
-                          author: userName,
-                          to: selectedValue,
-                          time,
-                        })
-                      }
-                  />
-              </InputRightElement>
+              <EmojiInput value={inputMessage} onSelection={emojiInserted}/>
+              <IconButton
+                  colorScheme='twitter'
+                  aria-label='Search database'
+                  icon={<ArrowForwardIcon/>}
+                  isDisabled={inputMessage === ''}
+                  onClick={() =>
+                    handleMessage({
+                      id: nanoid(),
+                      message: inputMessage,
+                      author: userName,
+                      to: selectedValue,
+                      time,
+                    })
+                  }
+              />
           </InputGroup>
       </Flex>}
     </div>
