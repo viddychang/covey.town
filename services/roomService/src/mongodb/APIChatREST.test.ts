@@ -34,18 +34,18 @@ describe('Chat API test', () => {
     const responseWrapper = await axiosClient.get<ResponseEnvelope<string>>('/');
     expect(responseWrapper.data.message).toBe('yaaay');
 
-  })
+  });
   it('test post /message and get /fetchAllMessages/:roomId endpoints', async () => {
     const ret = await apiClient.createTown({
-        friendlyName: 'dummy',
-        isPubliclyListed: true
-    })
+      friendlyName: 'dummy',
+      isPubliclyListed: true
+    });
 
     const requestBody = {
-        from: 'john doe',
-        to: 'all',
-        message: 'greetings from earth',
-        roomId: ret.coveyTownID
+      from: 'john doe',
+      to: 'all',
+      message: 'greetings from earth',
+      roomId: ret.coveyTownID
     };
         // console.log(ret.coveyTownID);
         // post data to db
@@ -56,19 +56,19 @@ describe('Chat API test', () => {
         // console.log(responseWrapper.data);
         // make sure that the data sent is equal to the data retrieved
     expect(responseWrapper.data).toEqual([postResponse.data]);
-    })
+  });
 
   it('test get /fetchAllMessages endpoint', async () => {
     const ret = await apiClient.createTown({
-        friendlyName: 'dummy',
-        isPubliclyListed: true
-    })
+      friendlyName: 'dummy',
+      isPubliclyListed: true
+    });
 
     const requestBody = {
-        from: 'john doe',
-        to: 'all',
-        message: 'greetings from earth',
-        roomId: ret.coveyTownID
+      from: 'john doe',
+      to: 'all',
+      message: 'greetings from earth',
+      roomId: ret.coveyTownID
     };
         // console.log(ret.coveyTownID);
         // post data to db
@@ -80,22 +80,22 @@ describe('Chat API test', () => {
         // make sure that there is data posted in the db after our post request. in general, there should be data
         // from previous sessions, but our post makes it certain that there is data for this test.
     expect(responseWrapper.data).toBeDefined();
-  })
+  });
 
   it('test post /room endpoint', async () => {
     const ret = await apiClient.createTown({
-        friendlyName: 'dummy',
-        isPubliclyListed: true
-    })
+      friendlyName: 'dummy',
+      isPubliclyListed: true
+    });
 
         // console.log(ret.coveyTownID);
 
     const postRequestData = {
-        roomId: ret.coveyTownID,
-        password: ret.coveyTownPassword,
-        friendlyName: 'dummy',
-        isPublic: true
-    }
+      roomId: ret.coveyTownID,
+      password: ret.coveyTownPassword,
+      friendlyName: 'dummy',
+      isPublic: true
+    };
 
     const postResponse = await axiosClient.post<ResponseEnvelope<string>>('/room', postRequestData);
         // console.log(postResponse);
