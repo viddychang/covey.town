@@ -15,7 +15,7 @@
   "homepage": "https://github.com/neu-se/covey.town#readme",
   "scripts": {
     "test": "jest",
-    "start": "concurrently \"node src/mongodb/index.js\" \"npm run build:live\"",
+    "start": "npm run build:live",
     "production": "npm run build && node build/server.js",
     "build": "tsc -p .",
     "pack": "npm-pack-zip",

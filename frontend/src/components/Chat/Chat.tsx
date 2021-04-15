@@ -22,7 +22,7 @@ import EmojiInput from './EmojiInput';
 import {ChatMessageProps} from "./types";
 import useMaybeVideo from "../../hooks/useMaybeVideo";
 
-const messagesRESTURL = "http://localhost:3001"
+const messagesRESTURL = "https://covey-town-mongo.herokuapp.com"
 
 export type ChatMessage = {
   id: string,
@@ -72,7 +72,7 @@ const Chat = () => {
     setOpenChat(state);
     video?.unPauseGame();
   };
-  
+
 
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
@@ -100,21 +100,21 @@ const Chat = () => {
 
   // This useEffect runs on page load and populates the chat box with previous messages
   useEffect(() => {
-    // Fetching all the stored meesages for the current town
+    // Fetching all the stored messages for the current town
     const messagesResponse = `${messagesRESTURL}/fetchAllMessages/${currentTownID}`;
     fetch(messagesResponse)
       .then((res) => res.json())
       .then((messagesFromDB) => {
         const messageHistory = convertMessagesToChat(messagesFromDB)
         // setMessages(oldArray => [...oldArray, ...messageHistory]);
-        messageHistory.map(messageObj => 
-          socket?.emit('message',messageObj.id,messageObj.message,messageObj.author,messageObj.to,messageObj.time))
+        messageHistory.map(messageObj =>
+          socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time))
       });
   }, [])
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
-      socket?.emit('message',messageObj.id,messageObj.message,messageObj.author,messageObj.to,messageObj.time);
+      socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time);
       setInputMessage('');
 
       // Insert the message into DB
@@ -132,7 +132,7 @@ const Chat = () => {
         })
       }).then((res) => console.log("Message posted successfully:", res.json()));
     }
-   // setMessages(oldArray => [...oldArray, messageObj]);
+    // setMessages(oldArray => [...oldArray, messageObj]);
   };
 
   const onKeyPress = (event: any) => {
@@ -148,7 +148,7 @@ const Chat = () => {
   }
 
   const emojiInserted = (messageWithEmoji: string) => {
-    setInputMessage(`${  messageWithEmoji}`);
+    setInputMessage(`${messageWithEmoji}`);
   };
 
 
@@ -193,8 +193,8 @@ const Chat = () => {
                   return (
                     <Box key={msg.id} overflow='auto' m='5'
                          className={msg.author === userName ? 'MyMessage' : 'Message'}
-                         color={(msg.to === userName) || (msg.author === userName && msg.to !== 'all') 
-                         ? 'black' : 'white'}>
+                         color={(msg.to === userName) || (msg.author === userName && msg.to !== 'all')
+                           ? 'black' : 'white'}>
                       <div
                         ref={el => {
                           if (el != null) {
@@ -205,7 +205,7 @@ const Chat = () => {
                         key={msgIndex}>
                         <p style={{float: 'right'}}>{msg.time}</p>
                         <p>
-                          {msg.author} {msg.to === userName ? '(privately)' : ''} {(msg.author === userName && msg.to !== 'all')? `(To ${msg.to} privately )`: ''} :
+                          {msg.author === userName ? 'You' : msg.author} {msg.to === userName ? '(privately)' : ''} {(msg.author === userName && msg.to !== 'all') ? `(To ${msg.to} privately )` : ''} :
                         </p>
                         <p>{msg.message}</p>
                       </div>
