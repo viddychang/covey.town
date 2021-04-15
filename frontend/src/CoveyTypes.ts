@@ -15,7 +15,18 @@ export type UserProfile = {
 export type NearbyPlayers = {
   nearbyPlayers: Player[]
 };
+
+export type ChatMessageProps = { 
+  messages:{
+  id: string;
+  message: string;
+  author: string;
+  to: string;
+  time: string;}[]
+};
+
 export type CoveyAppState = {
+  messages: ChatMessageProps,
   sessionToken: string,
   userName: string,
   currentTownFriendlyName: string,

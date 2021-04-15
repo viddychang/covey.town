@@ -2,16 +2,12 @@ import CORS from 'cors';
 import Express from 'express';
 import * as http from 'http';
 import { AddressInfo } from 'net';
-import { ChatServer } from './ChatServer';
 import CoveyTownsStore from './lib/CoveyTownsStore';
 import addTownRoutes from './router/towns';
 
 const app = Express();
 app.use(CORS());
 const server = http.createServer(app);
-// call to ChatServer causes heroku to crash 4/13/2021
-
-const app2 = new ChatServer().app;
 
 addTownRoutes(server, app);
 
@@ -23,5 +19,3 @@ server.listen(process.env.PORT || 8081, () => {
     CoveyTownsStore.getInstance().createTown(process.env.DEMO_TOWN_ID, false);
   }
 });
-
-export default { app2 };

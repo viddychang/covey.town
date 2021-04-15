@@ -17,7 +17,6 @@ import _ from 'underscore';
 import {nanoid} from 'nanoid';
 import React, {useContext, useEffect, useState} from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
-import {ChatContext} from './ChatContext';
 import './TownChat.css';
 import EmojiInput from './EmojiInput';
 import {ChatMessageProps} from "./types";
@@ -43,29 +42,26 @@ export type MessageFromDB = {
 }
 
 const Chat = () => {
-  // static contextType = ChatContext;
-
   // Constants used
-  const {players, currentTownFriendlyName, currentTownID, userName} = useCoveyAppState();
+  const {players, currentTownFriendlyName, currentTownID, userName, socket, messages} = useCoveyAppState();
   let msgIndex = 0;
   const today = new Date();
   const time = `${today.getHours()}:${today.getMinutes()}`;
-  const myContext = useContext(ChatContext);
   const video = useMaybeVideo();
 
   // React hooks
   const [openChat, setOpenChat] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   const [selectedValue, setselectedValue] = useState('all');
-  const [messages, setMessages] = useState([
-    {
-      id: '1',
-      message: `Hello ${userName}! Type a message and press Send Message to continue the chat.`,
-      author: 'Covey Bot',
-      to: 'all',
-      time: '22:00',
-    },
-  ]);
+  // const [messages, setMessages] = useState([
+  //   {
+  //     id: '1',
+  //     message: `Hello ${userName}! Type a message and press Send Message to continue the chat.`,
+  //     author: 'Covey Bot',
+  //     to: 'all',
+  //     time: '22:00',
+  //   },
+  // ]);
 
   const openedChat = (state: boolean) => {
     setOpenChat(state);
@@ -76,7 +72,7 @@ const Chat = () => {
     setOpenChat(state);
     video?.unPauseGame();
   };
-
+  
 
   // Function to convert the messages stored in DB to the format of chat displayed in the chat box
   const convertMessagesToChat = (messagesFromDB: MessageFromDB[]) => {
@@ -110,27 +106,15 @@ const Chat = () => {
       .then((res) => res.json())
       .then((messagesFromDB) => {
         const messageHistory = convertMessagesToChat(messagesFromDB)
-        setMessages(oldArray => [...oldArray, ...messageHistory]);
+        // setMessages(oldArray => [...oldArray, ...messageHistory]);
+        messageHistory.map(messageObj => 
+          socket?.emit('message',messageObj.id,messageObj.message,messageObj.author,messageObj.to,messageObj.time))
       });
   }, [])
 
-  useEffect(() => {
-
-    // Listening for messages and broadcasting it.
-    myContext.init();
-
-    const observable = myContext.onMessage();
-
-    observable.subscribe((m: ChatMessageProps) => {
-      messages.push(m);
-      setMessages(messages);
-      setInputMessage('');
-    });
-  }, [messages]);
-
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
-      myContext.send(messageObj);
+      socket?.emit('message',messageObj.id,messageObj.message,messageObj.author,messageObj.to,messageObj.time);
       setInputMessage('');
 
       // Insert the message into DB
@@ -148,7 +132,7 @@ const Chat = () => {
         })
       }).then((res) => console.log("Message posted successfully:", res.json()));
     }
-    setMessages(oldArray => [...oldArray, messageObj]);
+   // setMessages(oldArray => [...oldArray, messageObj]);
   };
 
   const onKeyPress = (event: any) => {
@@ -202,14 +186,15 @@ const Chat = () => {
           </div>
           <div className='App-chatbox'>
             {
-              _.uniq(messages, 'id')
+              _.uniq(messages.messages, 'id')
                 .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
                 .map((msg: ChatMessageProps) => {
                   msgIndex += 1;
                   return (
                     <Box key={msg.id} overflow='auto' m='5'
                          className={msg.author === userName ? 'MyMessage' : 'Message'}
-                         color={msg.to === userName ? 'black' : 'white'}>
+                         color={(msg.to === userName) || (msg.author === userName && msg.to !== 'all') 
+                         ? 'black' : 'white'}>
                       <div
                         ref={el => {
                           if (el != null) {
@@ -220,9 +205,8 @@ const Chat = () => {
                         key={msgIndex}>
                         <p style={{float: 'right'}}>{msg.time}</p>
                         <p>
-                          {msg.author} {msg.to === userName ? '(privately)' : ''}:
+                          {msg.author} {msg.to === userName ? '(privately)' : ''} {(msg.author === userName && msg.to !== 'all')? `(To ${msg.to} privately )`: ''} :
                         </p>
-                        {/* <p>{msg.to}, {userName}</p> */}
                         <p>{msg.message}</p>
                       </div>
                     </Box>

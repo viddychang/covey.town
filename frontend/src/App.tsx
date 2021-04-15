@@ -28,8 +28,6 @@ import Player, {ServerPlayer, UserLocation} from './classes/Player';
 import TownsServiceClient, {TownJoinResponse} from './classes/TownsServiceClient';
 import Video from './classes/Video/Video';
 import Chat from "./components/Chat/Chat";
-import SocketService from './components/Chat/SocketService';
-import {ChatContext} from './components/Chat/ChatContext';
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string, townIsPubliclyListed: boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -38,10 +36,16 @@ type CoveyAppUpdate =
   | { action: 'playerDisconnect'; player: Player }
   | { action: 'weMoved'; location: UserLocation }
   | { action: 'disconnect' }
-  ;
+  | { action: 'message';   id: string,
+  message: string,
+  author: string,
+  to: string,
+  time: string  };
+
 
 function defaultAppState(): CoveyAppState {
   return {
+    messages: {messages : []},
     nearbyPlayers: {nearbyPlayers: []},
     players: [],
     myPlayerID: '',
@@ -62,6 +66,7 @@ function defaultAppState(): CoveyAppState {
 
 function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyAppState {
   const nextState = {
+    messages: state.messages,
     sessionToken: state.sessionToken,
     currentTownFriendlyName: state.currentTownFriendlyName,
     currentTownID: state.currentTownID,
@@ -98,6 +103,15 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
 
   let updatePlayer;
   switch (update.action) {
+    case 'message': 
+      nextState.messages.messages.push({
+        id: update.id,
+        message: update.message,
+        author: update.author,
+        to: update.to,
+        time: update.time});     
+      break; 
+
     case 'doConnect':
       nextState.sessionToken = update.data.sessionToken;
       nextState.myPlayerID = update.data.myPlayerID;
@@ -177,6 +191,17 @@ async function GameController(initData: TownJoinResponse,
       dispatchAppUpdate({action: 'playerMoved', player: Player.fromServerPlayer(player)});
     }
   });
+  socket.on('message', ( id1: string,
+    message1: string,
+    author1: string,
+    to1: string,
+    time1: string ) => {
+    dispatchAppUpdate({ action: 'message',  id: id1,
+    message: message1,
+    author: author1,
+    to: to1,
+    time: time1});
+  });
   socket.on('playerDisconnect', (player: ServerPlayer) => {
     dispatchAppUpdate({action: 'playerDisconnect', player: Player.fromServerPlayer(player)});
   });
@@ -223,7 +248,6 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const page = useMemo(() => {
-    const chat = new SocketService();
     if (!appState.sessionToken) {
       return <Login doLogin={setupGameController}/>;
     }
@@ -234,9 +258,7 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
     return (
       <div>
         <WorldMap/>
-        <ChatContext.Provider value={chat}>
           <Chat/>
-        </ChatContext.Provider>
         <VideoOverlay preferredMode="fullwidth"/>
       </div>
     );

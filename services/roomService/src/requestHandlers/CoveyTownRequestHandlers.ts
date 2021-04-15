@@ -232,4 +232,19 @@ export function townSubscriptionHandler(socket: Socket): void {
   socket.on('playerMovement', (movementData: UserLocation) => {
     townController.updatePlayerLocation(s.player, movementData);
   });
+
+  socket.on('message', ( id1: string,
+    message1: string,
+    author1: string,
+    to1: string,
+    time1: string ) => {
+    socket.emit('message', id1,
+    message1,
+    author1,
+    to1,
+    time1 );
+    socket.broadcast.emit('message',id1,
+    message1, 
+    author1,to1, time1);
+  });
 }
