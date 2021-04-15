@@ -6,7 +6,7 @@ import { AddressInfo } from 'net';
 import TownsServiceClient from '../client/TownsServiceClient';
 import addTownRoutes from '../router/towns';
 
-const baseURL = 'http://localhost:3001';
+const baseURL = 'https://covey-town-mongo.herokuapp.com/';
 const axiosClient = axios.create( { baseURL } );
 
 export interface ResponseEnvelope<T> {
