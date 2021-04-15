@@ -81,6 +81,7 @@ const listTowns = (suffix: string) => Promise.resolve({
 
 function wrappedTownSelection() {
   return <ChakraProvider><CoveyAppContext.Provider value={{
+    messages: {messages: []},
     nearbyPlayers: { nearbyPlayers: [] },
     players: [],
     myPlayerID: '',
