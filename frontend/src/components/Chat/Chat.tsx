@@ -205,7 +205,7 @@ const Chat = () => {
                         key={msgIndex}>
                         <p style={{float: 'right'}}>{msg.time}</p>
                         <p>
-                          {msg.author === userName ? 'You' : msg.author} {msg.to === userName ? '(privately)' : ''} {(msg.author === userName && msg.to !== 'all') ? `(To ${msg.to} privately )` : ''} :
+                          {msg.author === userName ? 'You' : msg.author} {msg.to === userName ? '(privately)' : ''} {(msg.author === userName && msg.to !== 'all') ? `(privately to ${msg.to})` : ''} :
                         </p>
                         <p>{msg.message}</p>
                       </div>
@@ -218,10 +218,10 @@ const Chat = () => {
                   className='select-chat'
                   onChange={event => setselectedValue(event.target.value)}
                   variant='outline'>
-                  <option value="" selected disabled hidden>Recipient</option>
-                  <option className='select-chat' value='all'>Everyone</option>
+                  <option className='select-chat' value='all' selected>Everyone</option>
                 {players
                   .filter(p => p.userName !== userName)
+                  .sort((player1, player2) => player1.userName < player2.userName ? -1 : 1)
                   .map(player => (
                     <option className='select-chat' key={player.id} value={player.userName}>
                       {player.userName}
