@@ -75,7 +75,7 @@ describe('Chat API test', () => {
     await axiosClient.post<ResponseEnvelope<string>>('/message', requestBody);
     // console.log(postResponse.data);
     // get the messages for the room
-    const responseWrapper = await axiosClient.get<ResponseEnvelope<string>>(`/fetchAllMessages`);
+    const responseWrapper = await axiosClient.get<ResponseEnvelope<string>>('/fetchAllMessages');
     // console.log(responseWrapper.data);
     // make sure that there is data posted in the db after our post request. in general, there should be data
     // from previous sessions, but our post makes it certain that there is data for this test.
@@ -101,5 +101,5 @@ describe('Chat API test', () => {
     // console.log(postResponse);
     // check that a room has been created. this test is a bit flimsy
     expect(postResponse.data).toBeDefined();
-  })
+  });
 });
