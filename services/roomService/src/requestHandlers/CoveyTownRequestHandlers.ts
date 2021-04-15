@@ -239,12 +239,12 @@ export function townSubscriptionHandler(socket: Socket): void {
     to1: string,
     time1: string ) => {
     socket.emit('message', id1,
-    message1,
-    author1,
-    to1,
-    time1 );
-    socket.broadcast.emit('message',id1,
-    message1, 
-    author1,to1, time1);
+      message1,
+      author1,
+      to1,
+      time1 );
+    socket.broadcast.emit('message', id1,
+      message1, 
+      author1, to1, time1);
   });
 }
