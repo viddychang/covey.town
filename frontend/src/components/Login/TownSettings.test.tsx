@@ -35,6 +35,7 @@ mockUseCoveyAppState.apiClient = new TownsServiceClient();
 
 function wrappedTownSettings() {
   return <ChakraProvider><CoveyAppContext.Provider value={{
+    messages: {messages: []},
     nearbyPlayers: { nearbyPlayers: [] },
     players: [],
     myPlayerID: '',
