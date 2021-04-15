@@ -30,6 +30,9 @@ describe('Chat API test', () => {
     
     apiClient = new TownsServiceClient(`http://127.0.0.1:${address.port}`);
   });
+  afterAll(async () => {
+    await server.close();
+  });
   it('test that the API server is running', async () => {
     const responseWrapper = await axiosClient.get<ResponseEnvelope<string>>('/');
     expect(responseWrapper.data.message).toBe('yaaay');
