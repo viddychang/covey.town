@@ -26,4 +26,4 @@ To send and retrieve data to and from MongoDB, we have designed some endpoints t
 - GET /fetchAllMessages -- gets all the messages in the database
 - GET /fetchAllMessages/:roomId -- gets the messages for a chat room (private)
 - POST /message - creates a message record in the database
-- POST /room - creates a room record in the database which represents a private chat room
+- POST /room - creates a room record in the database which represents a public or private chat room
