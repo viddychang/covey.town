@@ -1,4 +1,4 @@
-#### Feature introduction
+## Feature introduction
 
 The current version of Covey.Town does not have a way for users to communicate with each other using text. Our feature offers users to chat with each other in a public chat room within each town. Additionally, users can privately chat with another user in the town. Users can switch between private and public chats by tab buttons that are included in the user interface. With this new feature, we are adding value to our users who may need to send text snippets to one another for project collaboration as well as increasing accessibility to Covey.Town to people who are Deaf or hard-of-hearing. 
 
@@ -8,7 +8,7 @@ This release of the chat feature includes:
 - The ability to see previous chats that were sent before joining the Town.
 - The ability to send emojis in messages.
 
-#### Feature User Guide
+## Feature User Guide
 
 This section provides a step by step user guide on how to use the chat feature in Covey.Town.
 
@@ -54,7 +54,7 @@ This section provides a step by step user guide on how to use the chat feature i
   <img src="https://github.com/viddychang/covey.town/blob/master/docs/emoji%20sent.png" width=50% height=50%>
 </p>
 
-#### Potential Enhancements
+## Potential Enhancements
 This version of our chat feature solved the core problem, which was to provide users an alternative to communicate versus using voice. However, there are some features that would help enhance the experience for various use cases. This section talks about three enhancements that would deliver additional value to users.
 1. Styling options for sent messages - currently, the text sent in a chat message is a predetermined font and standard style. Having styling options such as bold, italicize, or code blocks would help users emphasize certain points. This would be extremely helpful in the use case where two users are working on a programming project and want to send small quick snippets of code. WIth styling options, users can separate the text in their messages as well as put additional meanings to their text content.
 2. Group chat room - there are two options for the chat feature, a public chatroom that includes all users in the town and a private chat with one other user. As nice as it is to have a private conversation with another person, life can be more fun with a group! This enhancement would be solving for the use case of creating chat rooms with more than one user so that a group of users can seamlessly chat with one another versus using the public chat room or multiple one on one private chats.
