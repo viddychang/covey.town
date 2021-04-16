@@ -74,6 +74,6 @@ https://covey-town-mongo.herokuapp.com/
 
 The APIs implemented for our chat feature are tested in APIChatREST.test.ts The test can be run (along with original backend tests) by running `npm start` in the `services/roomService` directory.
 
-## Presentation
+## Demonstration Video
 
-Link to presentation video - https://www.screencast.com/t/gTeoOFDL44p
+Link to demo video - https://www.screencast.com/t/gTeoOFDL44p
