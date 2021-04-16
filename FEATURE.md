@@ -32,11 +32,12 @@ This section provides a step by step user guide on how to use the chat feature i
 5. In addition, if messages were sent to the public chat room before a user logged into the Town, those previous messages will appear in the chat window.
 
 ### Private Chat feature
-1. At any time a user wants to enter a private chat with another user in the Town, the user can click on the dropdown menu to select a different recipient:
+1. At any time a user wants to enter a private chat with another user in the Town, the user can click on the dropdown menu to select a different recipient ordered by first name:
 <p align="center">
   <img src="https://github.com/viddychang/covey.town/blob/master/docs/private.png" width=50% height=50%>
 </p>
-2. When a recipient is selected and a message is sent, the message can only be read by the recipient designated and the chat window will show which messages were sent privately and to whom:
+2. When a recipient is selected and a message is sent, the message can only be read by the recipient designated and the chat window will show which messages were sent/received privately and to/by whom:
+
 <p align="center">
   <img src="https://github.com/viddychang/covey.town/blob/master/docs/private_sent_messages.PNG" width=50% height=50%>
 </p>
