@@ -12,6 +12,14 @@ The frontend implements video chat using the [Twilio Programmable Video](https:/
 
 A backend service (in the `services/roomService` directory) implements the application logic: tracking which "towns" are available to be joined, and the state of each of those towns.
 
+### Chat feature
+
+A text-based chat feature has been added to Covey.Town in this project. The new feature allows users to:
+1. Send messages to a public room within a Town.
+2. Send messages privately to another user within the Town.
+3. Send text messages with emojis.
+4. Read a history of chats sent in the room.
+
 ## Running this app locally
 
 Running the application locally entails running both the backend service and a frontend.
@@ -45,3 +53,19 @@ Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWN
 
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
+
+### GitHub Repository Link
+
+https://github.com/viddychang/covey.town
+
+### Netlify Frontend Production Link
+
+https://elegant-albattani-a85435.netlify.app/
+
+### Heroku Backend Server Link
+
+https://covey-town-chat-32.herokuapp.com/
+
+### Chat API tests
+
+The APIs implemented for our chat feature are tested in APIChatREST.test.ts The test can be run (along with original backend tests) by running `npm start` in the `services/roomService` directory.
