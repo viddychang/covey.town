@@ -4,7 +4,7 @@ interface FunnyEmojiProps {
   title: string;
 }
 
-const FunnyEmojiIcon = ({title}: FunnyEmojiProps) => (
+const FunnyEmojiIcon = ({title}: FunnyEmojiProps) : JSX.Element => (
   <svg width={18} height={18}>
     <title>{title}</title>
     <g fill="#979797" fillRule="evenodd">

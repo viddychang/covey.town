@@ -9,10 +9,10 @@ import useClickOutside from "../../hooks/useClickOutside";
 
 interface EmojiInputProps {
   value: string;
-  onSelection(contentWithEmoji: string): any;
+  onSelection: (contentWithEmoji: string) => void;
 }
 
-const EmojiInput = ({ value, onSelection }: EmojiInputProps) => {
+const EmojiInput = ({ value, onSelection }: EmojiInputProps) : JSX.Element => {
   const [showPicker, setPickerState] = useState(false);
   const picker = useRef<HTMLDivElement>(null);
 

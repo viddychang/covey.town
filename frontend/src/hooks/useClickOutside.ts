@@ -4,7 +4,7 @@ const isRefArray = (r: RefObject<any> | RefObject<any>[]): r is RefObject<any>[]
 
 const isTarget = (ref1: RefObject<any>, event: MouseEvent) =>  ref1 && ref1.current && ref1.current.contains(event.target);
 
-const trueForAny = (array: any[], condition: (props: any) => boolean) => 
+const trueForAny = (array: React.RefObject<any>[], condition: (props: any) => boolean) =>
 
 array.reduce((conditionAlreadyMet, value) =>  conditionAlreadyMet || condition(value)
   , false);

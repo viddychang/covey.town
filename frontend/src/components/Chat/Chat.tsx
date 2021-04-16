@@ -5,8 +5,6 @@ import {
   IconButton,
   Input,
   InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Spacer,
   Grid,
   GridItem, Avatar,
@@ -15,7 +13,7 @@ import {
 import 'emoji-mart/css/emoji-mart.css';
 import _ from 'underscore';
 import {nanoid} from 'nanoid';
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import './TownChat.css';
 import EmojiInput from './EmojiInput';
@@ -43,7 +41,7 @@ export type MessageFromDB = {
   townid: string
 }
 
-const Chat = () => {
+const Chat = () : JSX.Element => {
   // Constants used
   const {players, currentTownFriendlyName, currentTownID, userName, socket, messages} = useCoveyAppState();
   let msgIndex = 0;
@@ -114,14 +112,13 @@ const Chat = () => {
         messageHistory.map(messageObj =>
           socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid))
       });
-  }, [])
+  }, )
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
       socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid);
       setInputMessage('');
-      console.log(messages);
-      console.log(`townid:   ${currentTownID}`);
+
       // Insert the message into DB
       fetch(`${messagesRESTURL}/message`, {
         method: 'POST',
@@ -135,12 +132,12 @@ const Chat = () => {
           message: inputMessage,
           roomId: currentTownID,
         })
-      }).then((res) => console.log("Message posted successfully:", res.json()));
+      }).then((res) => res.json());
     }
     // setMessages(oldArray => [...oldArray, messageObj]);
   };
 
-  const onKeyPress = (event: any) => {
+  const onKeyPress = (event: { charCode: number; }) => {
     if (event.charCode === 13) {
       handleMessage({
         id: nanoid(),
