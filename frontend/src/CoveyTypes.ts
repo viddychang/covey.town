@@ -22,7 +22,9 @@ export type ChatMessageProps = {
   message: string;
   author: string;
   to: string;
-  time: string;}[]
+  time: string;
+  townid: string;
+}[]
 };
 
 export type CoveyAppState = {

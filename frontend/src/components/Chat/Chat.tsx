@@ -29,7 +29,8 @@ export type ChatMessage = {
   message: string,
   author: string,
   to: string,
-  time: string
+  time: string,
+  townid: string
 }
 
 export type MessageFromDB = {
@@ -38,7 +39,8 @@ export type MessageFromDB = {
   to: string,
   message: string,
   roomId: string,
-  timestamp: string
+  timestamp: string,
+  townid: string
 }
 
 const Chat = () => {
@@ -84,7 +86,8 @@ const Chat = () => {
         message: '',
         author: '',
         to: '',
-        time: ''
+        time: '',
+        townid: ''
       }
       if (chat.to === 'all') {
         chatMessage.id = chat._id;
@@ -92,6 +95,7 @@ const Chat = () => {
         chatMessage.author = chat.from;
         chatMessage.to = 'all';
         chatMessage.time = `${timeStamp.getHours()}:${timeStamp.getMinutes()}`;
+        chatMessage.townid = chat.roomId;
         messagesArr.push(chatMessage)
       }
     });
@@ -108,15 +112,16 @@ const Chat = () => {
         const messageHistory = convertMessagesToChat(messagesFromDB)
         // setMessages(oldArray => [...oldArray, ...messageHistory]);
         messageHistory.map(messageObj =>
-          socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time))
+          socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid))
       });
   }, [])
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
-      socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time);
+      socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid);
       setInputMessage('');
-
+      console.log(messages);
+      console.log(`townid:   ${currentTownID}`);
       // Insert the message into DB
       fetch(`${messagesRESTURL}/message`, {
         method: 'POST',
@@ -143,6 +148,7 @@ const Chat = () => {
         author: userName,
         to: selectedValue,
         time,
+        townid: currentTownID
       })
     }
   }
@@ -187,7 +193,7 @@ const Chat = () => {
           <div className='App-chatbox'>
             {
               _.uniq(messages.messages, 'id')
-                .filter((m) => m.to === userName || m.to === 'all' || m.author === userName)
+                .filter((m) => (m.townid === currentTownID) && (m.to === userName || m.to === 'all' || m.author === userName))
                 .map((msg: ChatMessageProps) => {
                   msgIndex += 1;
                   return (
@@ -249,6 +255,7 @@ const Chat = () => {
                       author: userName,
                       to: selectedValue,
                       time,
+                      townid: currentTownID
                     })
                   }
               />

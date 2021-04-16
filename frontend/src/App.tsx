@@ -40,7 +40,8 @@ type CoveyAppUpdate =
   message: string,
   author: string,
   to: string,
-  time: string  };
+  time: string ,
+  townid: string };
 
 
 function defaultAppState(): CoveyAppState {
@@ -109,7 +110,9 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
         message: update.message,
         author: update.author,
         to: update.to,
-        time: update.time});     
+        time: update.time,
+        townid: update.townid
+      });     
       break; 
 
     case 'doConnect':
@@ -195,12 +198,14 @@ async function GameController(initData: TownJoinResponse,
     message1: string,
     author1: string,
     to1: string,
-    time1: string ) => {
+    time1: string,
+    townid1: string ) => {
     dispatchAppUpdate({ action: 'message',  id: id1,
     message: message1,
     author: author1,
     to: to1,
-    time: time1});
+    time: time1,
+    townid: townid1});
   });
   socket.on('playerDisconnect', (player: ServerPlayer) => {
     dispatchAppUpdate({action: 'playerDisconnect', player: Player.fromServerPlayer(player)});

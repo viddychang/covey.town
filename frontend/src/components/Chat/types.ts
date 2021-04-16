@@ -14,4 +14,5 @@ export type ChatMessageProps = {
   author: string;
   to: string;
   time: string;
+  townid: string;
 };

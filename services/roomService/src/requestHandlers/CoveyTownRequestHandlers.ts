@@ -237,14 +237,16 @@ export function townSubscriptionHandler(socket: Socket): void {
     message1: string,
     author1: string,
     to1: string,
-    time1: string ) => {
+    time1: string,
+    townid1: string ) => {
     socket.emit('message', id1,
       message1,
       author1,
       to1,
-      time1 );
+      time1,
+      townid1 );
     socket.broadcast.emit('message', id1,
       message1, 
-      author1, to1, time1);
+      author1, to1, time1, townid1);
   });
 }
