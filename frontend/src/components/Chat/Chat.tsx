@@ -53,6 +53,7 @@ const Chat = () : JSX.Element => {
   const [openChat, setOpenChat] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   const [selectedValue, setselectedValue] = useState('all');
+  const [firstLoad, setFirstLoad] = useState(false);
   // const [messages, setMessages] = useState([
   //   {
   //     id: '1',
@@ -102,6 +103,8 @@ const Chat = () : JSX.Element => {
 
   // This useEffect runs on page load and populates the chat box with previous messages
   useEffect(() => {
+    if(!firstLoad){ 
+    setFirstLoad(true);
     // Fetching all the stored messages for the current town
     const messagesResponse = `${messagesRESTURL}/fetchAllMessages/${currentTownID}`;
     fetch(messagesResponse)
@@ -112,6 +115,7 @@ const Chat = () : JSX.Element => {
         messageHistory.map(messageObj =>
           socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid))
       });
+    }
   }, )
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
@@ -134,7 +138,6 @@ const Chat = () : JSX.Element => {
         })
       }).then((res) => res.json());
     }
-    // setMessages(oldArray => [...oldArray, messageObj]);
   };
 
   const onKeyPress = (event: { charCode: number; }) => {
