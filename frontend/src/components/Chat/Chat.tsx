@@ -116,7 +116,7 @@ const Chat = () : JSX.Element => {
           socket?.emit('message', messageObj.id, messageObj.message, messageObj.author, messageObj.to, messageObj.time,messageObj.townid))
       });
     }
-  }, )
+  },[firstLoad, currentTownID, socket] )
 
   const handleMessage = (messageObj: ChatMessageProps): void => {
     if (inputMessage !== '') {
