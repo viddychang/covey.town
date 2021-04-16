@@ -38,7 +38,7 @@ This section provides a step by step user guide on how to use the chat feature i
 </p>
 2. When a recipient is selected and a message is sent, the message can only be read by the recipient designated and the chat window will show which messages were sent privately and to whom:
 <p align="center">
-  <img src="https://github.com/viddychang/covey.town/blob/master/docs/sent_messages.png" width=50% height=50%>
+  <img src="https://github.com/viddychang/covey.town/blob/master/docs/private_sent_messages.PNG" width=50% height=50%>
 </p>
 3. Just like for public chat messages, private chat messages received/sent when the user is logged in will appear in the window. This includes messages that were sent to the user when the user closed the chat window.
 
