@@ -9,6 +9,16 @@ In this section, we have a diagram of how our feature was implemented from the F
   <img src="https://github.com/viddychang/covey.town/blob/master/docs/chat-arch.png" >
 </p>
 
+Front-End
+- The front-end has two main components - A chat text area component and a Message viewer/window component.
+- The chat text area component maps to the small text area where the user can type a message after he joins the room. Along this input text area, there is an additional component that allows users to select emojis from a menu.
+- The message viewer/window component is responsible for the panel that displays all the messages exchanged in the room.
+
+Back-End
+- The client handles all the communication with the server and helps populate the data onto the front-end UI components.
+- The server listens for new connections and any messages from the users of the room.
+- The messages are then stored in the database (MongoDB in our implementation) along with the timestamp which helps displaying the messages - in the same order as they were sent, to any new users that join the room.
+
 ## CRC Cards
 This section focuses on the classes that were added to the codebase.
 <p align="center">
